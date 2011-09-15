@@ -91,11 +91,11 @@ def code_array(buf, array_name = 'shellcode', row_width = 16, line_delimiter = '
 			out += "\t\"%s\"%s\n" % ( lines[i], line_delimiter )
 
 	if fancy:
-			out += "\t" + colors.bold() + colors.fg('magenta') + "\""
-			out += colors.fg("red") + lines[i]
-			out += colors.fg('magenta') + "\"" + colors.end() + ";"
-			out += "\n\n"
-			# out += "\t\"%s\";\n\n" % ( lines[len(lines)-1] )
+		out += "\t" + colors.bold() + colors.fg('magenta') + "\""
+		out += colors.fg("red") + lines[len(lines)-1]
+		out += colors.fg('magenta') + "\"" + colors.end() + ";"
+		out += "\n\n"
+		# out += "\t\"%s\";\n\n" % ( lines[len(lines)-1] )
 	else:
 		out += "\t\"%s\";\n\n" % ( lines[len(lines)-1] )
 
