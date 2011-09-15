@@ -7,19 +7,28 @@ import colors
 ## wrapper
 def validate(param, value):
 	validators = {
-		'ip'    : validate_ip,
-		'u16be' : validate_u16be
+		'ip'     : validate_ip,
+		'u16be'  : validate_u16be,
+		'string' : validate_string
 	}
 
 	return validators[ param['type'] ](value)
 
 def output(param, value):
 	outfuncs = {
-		'ip'    : output_ip,
-		'u16be' : output_u16be
+		'ip'     : output_ip,
+		'u16be'  : output_u16be,
+		'string' : output_string
 	}
 
 	return outfuncs[ param['type'] ](value)
+
+## string
+def validate_string(val):
+	return True
+
+def output_string(instr):
+	return instr.encode('hex') + 'aa'
 
 ## IP
 def validate_ip(val):
