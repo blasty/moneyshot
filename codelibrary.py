@@ -25,6 +25,9 @@ def load_codes_dir(dirname, depth = 0):
 			if extension == ".json":
 				jstr = open(dirname + os.sep + entry).read()
 				shellcodes[basename] = simplejson.loads(jstr)
+
+				# fixup multiline kodez
+				shellcodes[basename]["code"] = ''.join(shellcodes[basename]["code"])
 	
 	return shellcodes
 
@@ -55,7 +58,7 @@ def get_by_name(path):
 			if "description" in return_codes[part]:
 				return return_codes[part]
 			else:
-				return False
+				return_codes = return_codes[part]
 		else:
 			return False
 
@@ -67,8 +70,8 @@ def print_codes(codes, depth = 0):
 	for key in codes.keys():
 		if "description" in codes[key]:
 			second_col = "%s%4d%s bytes -- %s" % (colors.fg('green'), get_code_size(codes[key]), colors.end(), codes[key]['description'])
-			print "  " * depth + key.ljust(40 - (depth*2)) + second_col
+			print "  " * (depth+1) + key.ljust(40 - (depth*2)) + second_col
 			
 		else:
-			print "  " * depth + colors.bold() + key + colors.end()
+			print "  " * (depth+1) + colors.bold() + key + colors.end()
 			print_codes(codes[key], depth+1)
