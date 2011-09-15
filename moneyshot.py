@@ -42,15 +42,20 @@ def action_build(codename, inparams):
 	if 'outformat' not in params:
 		params['outformat'] = "c"
 
-	shellcode = codelibrary.get_by_name(codename)
+	codenames = codename.split(',')
 
-	if "parameters" in shellcode:
-		shellcode = codeparameters.handle_parameters(shellcode, params)
+	bincode = ''
 
-	bincode = outputter.hex_bin(shellcode['code'])
+	for curname in codenames:
+		shellcode = codelibrary.get_by_name(curname)
+
+		if "parameters" in shellcode:
+			shellcode = codeparameters.handle_parameters(shellcode, params)
+
+		bincode += outputter.hex_bin(shellcode['code'])
+
 
 	outformat = params['outformat']
-
 	print "\n\n" + outfunc[ outformat ](bincode, fancy = True)
 
 	if 'outfile' in params:
