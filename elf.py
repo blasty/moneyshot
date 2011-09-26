@@ -54,7 +54,6 @@ class ElfObject:
 		sh_raw    = self.data[sh_offset:sh_end]
 
 		self.parse_section_headers()
-		#print sections
 
 		self.strtable = [""]
 		pos = 0
@@ -63,9 +62,15 @@ class ElfObject:
 			strstart = self.sections[ self.header['shstrnidx'] ]['offset']
 			strend   = strstart + self.sections[ self.header['shstrnidx'] ]['size']
 			self.strdata  = self.data[strstart:strend]
-			#strtable = strdata.replace("\x00", "\n").splitlines()
 
-		#self.print_section_headers()
+	def section_data(self, name):
+		for section in self.sections:
+			section_name = self.strdata[ section['name']:].split("\x00")[0]
+			if section_name == name:
+				return section['data']
+
+		return ""
+
 
 	def parse_header(self):
 		self.header['magic']   = struct.unpack("16c", self.data[0:16])
@@ -124,6 +129,10 @@ class ElfObject:
 			section['info']   = struct.unpack("L", sdata[28:32])[0]
 			section['align']  = struct.unpack("L", sdata[32:36])[0]
 			section['entsz']  = struct.unpack("L", sdata[36:40])[0]
+
+			start = section['offset']
+			end   = start + section['size']
+			section['data'] = self.data[start:end]
 
 			self.sections.append(section)
 			i = i + self.header['shentsize']
