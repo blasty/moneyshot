@@ -7,6 +7,14 @@ import codelibrary
 import codeparameters
 import pprint
 
+
+outfunc = {
+	'c'       : outputter.c,
+	'php'     : outputter.php,
+	'perl'    : outputter.perl,
+	'hexdump' : outputter.hexdump
+}
+
 def banner():
 	ms_fancy  = colors.bold() + colors.fg('yellow') + "$$$ " + colors.end()
 	ms_fancy += colors.bold() + "moneyshot" + colors.end()
@@ -23,15 +31,14 @@ def action_list(path = ""):
 	codes = codelibrary.find_codes(path)
 	codelibrary.print_codes(codes)
 
+def action_format(outformat):
+	data = sys.stdin.readlines()
+	data = ''.join(data)
+
+	print outfunc[ outformat ](data, fancy = False)
+
 def action_build(codename, inparams):
 	params = { }
-
-	outfunc = {
-		'c'       : outputter.c,
-		'php'     : outputter.php,
-		'perl'    : outputter.perl,
-		'hexdump' : outputter.hexdump
-	}
 
 	# parse user args
 	for keyval in inparams:
@@ -81,6 +88,9 @@ if action == "list":
 		action_list(sys.argv[2])
 	else:
 		action_list()
+
+elif action == "format":
+	action_format(sys.argv[2])
 
 elif action == "build":
 	action_build(sys.argv[2], sys.argv[2:])
