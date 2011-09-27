@@ -2,6 +2,7 @@
 
 import struct
 import sys
+import os
 
 elf_types = {
 	0: 'No file type',
@@ -36,6 +37,12 @@ section_types = {
 	11: 'DYNSYM'
 }
 
+def fromdata(data):
+	return ElfObject(data)
+
+def fromfile(filename):
+	return ElfObject(open(filename, 'rb').read())
+
 class ElfObject:
 	data = ''
 	strdata = ''
@@ -63,11 +70,11 @@ class ElfObject:
 			strend   = strstart + self.sections[ self.header['shstrnidx'] ]['size']
 			self.strdata  = self.data[strstart:strend]
 
-	def section_data(self, name):
+	def section(self, name):
 		for section in self.sections:
 			section_name = self.strdata[ section['name']:].split("\x00")[0]
 			if section_name == name:
-				return section['data']
+				return section
 
 		return ""
 
