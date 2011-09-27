@@ -22,7 +22,7 @@ def banner():
 	ms_fancy += colors.bold() + "blasty"  + colors.end()
 	ms_fancy += colors.bold() + colors.fg('yellow') + " $$$" + colors.end()
 
-	print "\n " + ms_fancy + "\n"
+	sys.stderr.write("\n " + ms_fancy + "\n\n")
 
 def warning(instr):
 	print "  " + colors.fg('red') + colors.bold() + "!!" + colors.end() + " " + instr
