@@ -12,7 +12,8 @@ outfunc = {
 	'c'       : outputter.c,
 	'php'     : outputter.php,
 	'perl'    : outputter.perl,
-	'hexdump' : outputter.hexdump
+	'hexdump' : outputter.hexdump,
+	'disas'   : outputter.disas
 }
 
 def banner():
@@ -22,7 +23,7 @@ def banner():
 	ms_fancy += colors.bold() + "blasty"  + colors.end()
 	ms_fancy += colors.bold() + colors.fg('yellow') + " $$$" + colors.end()
 
-	sys.stderr.write("\n " + ms_fancy + "\n\n")
+	sys.stderr.write("\n " + ms_fancy + "\n")
 
 def warning(instr):
 	print "  " + colors.fg('red') + colors.bold() + "!!" + colors.end() + " " + instr
@@ -35,7 +36,7 @@ def action_format(outformat):
 	data = sys.stdin.readlines()
 	data = ''.join(data)
 
-	print outfunc[ outformat ](data, fancy = False)
+	print outfunc[ outformat ](data, fancy = False),
 
 def action_build(codename, inparams):
 	params = { }
@@ -63,6 +64,7 @@ def action_build(codename, inparams):
 
 
 	outformat = params['outformat']
+	#print "\n\n" + outfunc[ outformat ](bincode, fancy = True)
 	print "\n\n" + outfunc[ outformat ](bincode, fancy = True)
 
 	if 'outfile' in params:
@@ -73,7 +75,9 @@ def action_build(codename, inparams):
 
 
 ## main program flow
-banner()
+if len(sys.argv) >= 2:
+	if sys.argv[1] != "format":
+		banner()
 
 if len(sys.argv) == 1:
 	print "no action given"
@@ -90,7 +94,10 @@ if action == "list":
 		action_list()
 
 elif action == "format":
-	action_format(sys.argv[2])
+	if len(sys.argv) < 3:
+		action_format("c")
+	else:
+		action_format(sys.argv[2])
 
 elif action == "build":
 	action_build(sys.argv[2], sys.argv[2:])
