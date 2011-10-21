@@ -1,6 +1,38 @@
 #!/usr/bin/python
 
 import colors
+import distorm3
+
+def disas(buf, array_name = '', row_width = 16, fancy = False):
+	disas = distorm3.Decode(0, buf)
+	out = ''
+
+	for (offset, size, instruction, hexdump) in disas:
+		tmp = ''
+
+		if fancy:
+			tmp += colors.fg('cyan')
+
+		tmp += "%.8x: " % (offset)
+
+		if fancy:
+			tmp += colors.fg('red')
+
+		tmp += hexdump
+		tmp += " " * (20-len(hexdump))
+
+		if fancy:
+			tmp += colors.fg('green')
+
+		tmp += instruction
+
+		if fancy:
+			tmp += colors.end()
+
+		out += "  " + tmp + "\n"
+
+	return out
+
 
 def hexdump(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 	# build horizontal marker
@@ -54,7 +86,7 @@ def hexdump(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 				else:
 					asciiz += '.'
 			else:
-					asciiz += ' '
+				asciiz += ' '
 
 		if fancy:
 			out += colors.bold() + "| " + colors.fg('green') + asciiz + colors.end() + colors.bold() + " |" + colors.end() + "\n"
