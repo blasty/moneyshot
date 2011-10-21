@@ -28,7 +28,7 @@ def validate_string(val):
 	return True
 
 def output_string(instr):
-	return instr.encode('hex') + 'aa'
+	return instr.encode('hex')
 
 ## IP
 def validate_ip(val):
