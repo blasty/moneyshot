@@ -23,13 +23,23 @@ def banner():
 	ms_fancy += colors.bold() + "blasty"  + colors.end()
 	ms_fancy += colors.bold() + colors.fg('yellow') + " $$$" + colors.end()
 
-	sys.stderr.write("\n " + ms_fancy + "\n")
+	sys.stderr.write("\n " + ms_fancy + "\n\n")
+
+def usage():
+	print ""
+	print "  usage: moneyshot <action> [options]\n"
+	print "  actions:"
+	print "    * list"
+	print "    * build"
+	print "    * pattern"
+	print "    * format\n"
 
 def warning(instr):
 	print "  " + colors.fg('red') + colors.bold() + "!!" + colors.end() + " " + instr
 
 def action_list(path = ""):
 	codes = codelibrary.find_codes(path)
+	print ""
 	codelibrary.print_codes(codes)
 
 def action_format(outformat):
@@ -37,6 +47,18 @@ def action_format(outformat):
 	data = ''.join(data)
 
 	print outfunc[ outformat ](data, fancy = False),
+
+def gen_pattern(length):
+	n = 0
+	out = ''
+
+	for x in range(0,26):
+		for y in range(0,26):
+			for z in range(0,10):
+				out += "%c%c%c" % (chr(0x41+x), chr(0x61+y), chr(0x30+z))
+				n = n + 3
+				if n >= length:
+					return out[0:length]
 
 def action_build(codename, inparams):
 	params = { }
@@ -64,7 +86,6 @@ def action_build(codename, inparams):
 
 
 	outformat = params['outformat']
-	#print "\n\n" + outfunc[ outformat ](bincode, fancy = True)
 	print "\n\n" + outfunc[ outformat ](bincode, fancy = True)
 
 	if 'outfile' in params:
@@ -75,12 +96,14 @@ def action_build(codename, inparams):
 
 
 ## main program flow
-if len(sys.argv) >= 2:
-	if sys.argv[1] != "format":
-		banner()
+#if len(sys.argv) >= 2:
+#	if sys.argv[1] != "format":
+#		banner()
+#else:
+#	banner()
 
 if len(sys.argv) == 1:
-	print "no action given"
+	usage()
 	exit()
 
 action = sys.argv[1]
@@ -92,6 +115,27 @@ if action == "list":
 		action_list(sys.argv[2])
 	else:
 		action_list()
+
+elif action == "pattern":
+	if len(sys.argv) == 3:
+		length = int(sys.argv[2])
+		pat = gen_pattern(length)
+		print pat
+	elif len(sys.argv) == 4:
+		length = int(sys.argv[2])
+		pat = gen_pattern(length)
+
+		if sys.argv[3][0:2] == "0x":
+			hexval = int(sys.argv[3], 16)
+			str  = chr(hexval & 0xff)
+			str += chr((hexval >> 8) & 0xff)
+			str += chr((hexval >> 16) & 0xff)
+			str += chr((hexval >> 24) & 0xff)
+			print pat.find(str, 0)
+		else:
+			print pat.find(sys.argv[3], 0)
+	else:
+		print "fail"
 
 elif action == "format":
 	if len(sys.argv) < 3:
