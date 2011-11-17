@@ -1,0 +1,16 @@
+{
+	"description" : "paint the main screen bright red and halt execution",
+	"author"      : "blasty",
+	"code"        : [
+		"0143a0e30000a0e3bc06c4e14c009fe5",
+		"b000c4e18100a0e3024c84e24000c4e5",
+		"024c44e2420fa0e3ba00c4e10504a0e3",
+		"2c109fe5b010c0e128009fe50010a0e3",
+		"6a2ea0e3090000eb1c009fe50010a0e3",
+		"062ca0e3050000eb000006effdffffea",
+		"000201001f8000000080000600080006",
+		"b010c0e1020080e2022042e2000052e3",
+		"faffff1a1eff2fe10000a0e10000a0e1",
+		"ddccbbaa0000a0e10000a0e10000a0e1"
+	]
+}

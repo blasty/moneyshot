@@ -1,0 +1,12 @@
+{
+	"description" : "write() somethinig to stdout",
+	"author"      : "blasty",
+	"parameters"  : [
+		{
+			"name"        : "outstr",
+			"type"        : "string",
+			"placeholder" : "beef"
+		}
+	],
+	"code" : "d9eed974e4f45983c12431c031db89ca428a023caa75f929cab004b301cd8001d14151c3beefaa"
+}

