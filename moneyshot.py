@@ -13,7 +13,8 @@ outfunc = {
 	'php'     : outputter.php,
 	'perl'    : outputter.perl,
 	'hexdump' : outputter.hexdump,
-	'disas'   : outputter.disas
+	'disas'   : outputter.disas,
+	'bash'    : outputter.bash
 }
 
 def banner():

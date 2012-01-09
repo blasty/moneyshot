@@ -33,6 +33,16 @@ def disas(buf, array_name = '', row_width = 16, fancy = False):
 
 	return out
 
+def bash(buf, array_name = 'shellcode', row_width = 16, fancy = False):
+	out = "$'"
+	for c in buf:
+		if ord(c) >= 0x20 and ord(c) <= 0x7E:
+			out += c
+		else:
+			out += "\\x%02x" % (ord(c))
+
+	out += "'"
+	return out
 
 def hexdump(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 	# build horizontal marker
