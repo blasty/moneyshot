@@ -50,6 +50,7 @@ class ElfObject:
 	elfwidth = 0
 	header = { }
 	section = { }
+	strtable = []
 
 	def __init__(self, elf_content):
 		self.data = elf_content
@@ -76,6 +77,14 @@ class ElfObject:
 			strstart = self.sections[ self.header['shstrnidx'] ]['offset']
 			strend   = strstart + self.sections[ self.header['shstrnidx'] ]['size']
 			self.strdata  = self.data[strstart:strend]
+
+
+		for section in self.sections:
+			if section['addr'] == 0:
+				continue
+
+			section_name = self.strdata[ section['name']:].split("\x00")[0]
+			self.strtable.append(section_name)
 
 	def section(self, name):
 		for section in self.sections:
@@ -184,13 +193,14 @@ class ElfObject:
 			self.sections.append(section)
 			i = i + self.header['shentsize']
 
+
 	def print_section_headers(self):
 		for section in self.sections:
 			if section['addr'] == 0:
 				continue
 
 			section_name = self.strdata[ section['name']:].split("\x00")[0]
-
+	
 			if section['type'] in section_types:
 				type_string = section_types[ section['type'] ]
 			else:
