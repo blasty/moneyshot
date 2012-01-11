@@ -7,6 +7,7 @@ import colors
 ## wrapper
 def validate(param, value):
 	validators = {
+		'u8'	 : validate_u8,
 		'ip'     : validate_ip,
 		'u16be'  : validate_u16be,
 		'string' : validate_string
@@ -16,6 +17,7 @@ def validate(param, value):
 
 def output(param, value):
 	outfuncs = {
+		'u8'	 : output_u8,
 		'ip'     : output_ip,
 		'u16be'  : output_u16be,
 		'string' : output_string
@@ -43,6 +45,18 @@ def output_ip(instr):
 	(a,b,c,d) = instr.split(".")
 	return "%02x%02x%02x%02x" % (int(a), int(b), int(c), int(d))
 
+
+## U8
+def validate_u8(val):
+	val = int(val)
+	if val >= 0 and val <= 0xff:
+		return True
+	else:
+		return False
+
+def output_u8(val):
+	val = int(val)
+	return "%02x" % (val)
 
 ## U16be
 def validate_u16be(val):
