@@ -19,7 +19,8 @@ elf_machines = {
 	4: 'Motorola 68k',
 	5: 'Morotola 88k',
 	7: 'Intel 80860',
-	8: 'MIPS RS3000'
+	8: 'MIPS RS3000',
+	62: 'x86-64'
 }
 
 section_types = {
@@ -46,14 +47,20 @@ def fromfile(filename):
 class ElfObject:
 	data = ''
 	strdata = ''
+	elfwidth = 0
 	header = { }
 	section = { }
 
 	def __init__(self, elf_content):
 		self.data = elf_content
 
+		if ord(self.data[4]) == 1:
+			self.elfwidth = 32
+		else:
+			self.elfwidth = 64
+
 		self.parse_header()
-		#self.print_header()
+		self.print_header()
 
 		sh_offset = self.header['shoff']
 		sh_length = self.header['shnum'] * self.header['shentsize']
@@ -81,20 +88,40 @@ class ElfObject:
 
 	def parse_header(self):
 		self.header['magic']   = struct.unpack("16c", self.data[0:16])
-		self.header['type']    = struct.unpack("<H",   self.data[16:18])[0]
-		self.header['machine'] = struct.unpack("<H",   self.data[18:20])[0]
-		self.header['version'] = struct.unpack("<L",   self.data[20:24])[0]
-		self.header['entry']   = struct.unpack("<L",   self.data[24:28])[0]
-		self.header['phoff']   = struct.unpack("<L",   self.data[28:32])[0]
-		self.header['shoff']   = struct.unpack("<L",   self.data[32:36])[0]
-		self.header['flags']   = struct.unpack("<L",   self.data[36:40])[0]
 
-		self.header['ehsize']     = struct.unpack("<H", self.data[40:42])[0]
-		self.header['phentsize']  = struct.unpack("<H", self.data[42:44])[0]
-		self.header['phnum']      = struct.unpack("<H", self.data[44:46])[0]
-		self.header['shentsize']  = struct.unpack("<H", self.data[46:48])[0]
-		self.header['shnum']      = struct.unpack("<H", self.data[48:50])[0]
-		self.header['shstrnidx']  = struct.unpack("<H", self.data[50:52])[0]
+
+		if self.elfwidth == 32:
+			self.header['type']    = struct.unpack("<H",   self.data[16:18])[0]
+			self.header['machine'] = struct.unpack("<H",   self.data[18:20])[0]
+
+			self.header['version'] = struct.unpack("<L",   self.data[20:24])[0]
+			self.header['entry']   = struct.unpack("<L",   self.data[24:28])[0]
+			self.header['phoff']   = struct.unpack("<L",   self.data[28:32])[0]
+			self.header['shoff']   = struct.unpack("<L",   self.data[32:36])[0]
+			self.header['flags']   = struct.unpack("<L",   self.data[36:40])[0]
+
+			self.header['ehsize']     = struct.unpack("<H", self.data[40:42])[0]
+			self.header['phentsize']  = struct.unpack("<H", self.data[42:44])[0]
+			self.header['phnum']      = struct.unpack("<H", self.data[44:46])[0]
+			self.header['shentsize']  = struct.unpack("<H", self.data[46:48])[0]
+			self.header['shnum']      = struct.unpack("<H", self.data[48:50])[0]
+			self.header['shstrnidx']  = struct.unpack("<H", self.data[50:52])[0]
+		else:
+			self.header['type']    = struct.unpack("<H",   self.data[16:18])[0]
+			self.header['machine'] = struct.unpack("<H",   self.data[18:20])[0]
+
+			self.header['version'] = struct.unpack("<L",   self.data[20:24])[0]
+			self.header['entry']   = struct.unpack("<Q",   self.data[24:32])[0]
+			self.header['phoff']   = struct.unpack("<Q",   self.data[32:40])[0]
+			self.header['shoff']   = struct.unpack("<Q",   self.data[40:48])[0]
+			self.header['flags']   = struct.unpack("<L",   self.data[48:52])[0]
+
+			self.header['ehsize']     = struct.unpack("<H", self.data[52:54])[0]
+			self.header['phentsize']  = struct.unpack("<H", self.data[54:56])[0]
+			self.header['phnum']      = struct.unpack("<H", self.data[56:58])[0]
+			self.header['shentsize']  = struct.unpack("<H", self.data[58:60])[0]
+			self.header['shnum']      = struct.unpack("<H", self.data[60:62])[0]
+			self.header['shstrnidx']  = struct.unpack("<H", self.data[62:64])[0]
 
 	def print_header(self):
 		print ""
@@ -126,16 +153,29 @@ class ElfObject:
 	
 			section = { }
 
-			section['name']   = struct.unpack("<L", sdata[0:4])[0]
-			section['type']   = struct.unpack("<L", sdata[4:8])[0]
-			section['flags']  = struct.unpack("<L", sdata[8:12])[0]
-			section['addr']   = struct.unpack("<L", sdata[12:16])[0]
-			section['offset'] = struct.unpack("<L", sdata[16:20])[0]
-			section['size']   = struct.unpack("<L", sdata[20:24])[0]
-			section['link']   = struct.unpack("<L", sdata[24:28])[0]
-			section['info']   = struct.unpack("<L", sdata[28:32])[0]
-			section['align']  = struct.unpack("<L", sdata[32:36])[0]
-			section['entsz']  = struct.unpack("<L", sdata[36:40])[0]
+			if self.elfwidth == 32:
+				section['name']   = struct.unpack("<L", sdata[0:4])[0]
+				section['type']   = struct.unpack("<L", sdata[4:8])[0]
+				section['flags']  = struct.unpack("<L", sdata[8:12])[0]
+				section['addr']   = struct.unpack("<L", sdata[12:16])[0]
+				section['offset'] = struct.unpack("<L", sdata[16:20])[0]
+				section['size']   = struct.unpack("<L", sdata[20:24])[0]
+				section['link']   = struct.unpack("<L", sdata[24:28])[0]
+				section['info']   = struct.unpack("<L", sdata[28:32])[0]
+				section['align']  = struct.unpack("<L", sdata[32:36])[0]
+				section['entsz']  = struct.unpack("<L", sdata[36:40])[0]
+			else:
+				section['name']   = struct.unpack("<L", sdata[0:4])[0]
+				section['type']   = struct.unpack("<L", sdata[4:8])[0]
+				section['flags']  = struct.unpack("<Q", sdata[8:16])[0]
+				section['addr']   = struct.unpack("<Q", sdata[16:24])[0]
+				section['offset'] = struct.unpack("<Q", sdata[24:32])[0]
+				section['size']   = struct.unpack("<Q", sdata[32:40])[0]
+				section['link']   = struct.unpack("<L", sdata[40:44])[0]
+				section['info']   = struct.unpack("<L", sdata[44:48])[0]
+				section['align']  = struct.unpack("<Q", sdata[48:56])[0]
+				section['entsz']  = struct.unpack("<Q", sdata[56:64])[0]
+
 
 			start = section['offset']
 			end   = start + section['size']
