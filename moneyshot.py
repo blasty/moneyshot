@@ -96,13 +96,6 @@ def action_build(codename, inparams):
 		f.close()
 
 
-## main program flow
-#if len(sys.argv) >= 2:
-#	if sys.argv[1] != "format":
-#		banner()
-#else:
-#	banner()
-
 if len(sys.argv) == 1:
 	usage()
 	exit()
