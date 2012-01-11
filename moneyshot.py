@@ -5,6 +5,7 @@ import colors
 import outputter
 import codelibrary
 import codeparameters
+import ezrop
 import pprint
 
 
@@ -109,6 +110,12 @@ if action == "list":
 		action_list(sys.argv[2])
 	else:
 		action_list()
+
+elif action == "rop":
+	# figure out parameter
+	#if re.search("^[0-9a-f]+$", sys.argv[3]) != None:
+
+	ezrop.do_ropfind(sys.argv[2], sys.argv[3])
 
 elif action == "pattern":
 	if len(sys.argv) == 3:
