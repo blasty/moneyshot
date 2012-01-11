@@ -25,6 +25,13 @@ def output(param, value):
 
 	return outfuncs[ param['type'] ](value)
 
+## generic number parser
+def parse_num(val):
+	if val[0:2] == "0x":
+		return int(val, 16)
+	else:
+		return int(val)
+
 ## string
 def validate_string(val):
 	return True
@@ -48,26 +55,26 @@ def output_ip(instr):
 
 ## U8
 def validate_u8(val):
-	val = int(val)
+	val = parse_num(val)
 	if val >= 0 and val <= 0xff:
 		return True
 	else:
 		return False
 
 def output_u8(val):
-	val = int(val)
+	val = parse_num(val)
 	return "%02x" % (val)
 
 ## U16be
 def validate_u16be(val):
-	val = int(val)
+	val = parse_num(val)
 	if val >= 0 and val <= 0xffff:
 		return True
 	else:
 		return False
 
 def output_u16be(val):
-	val = int(val)
+	val = parse_num(val)
 	return "%02x%02x" % ((val >> 8) & 0xff, val & 0xff)
 
 def param_stdin(parameter):
