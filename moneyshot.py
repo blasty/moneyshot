@@ -7,6 +7,7 @@ import codelibrary
 import codeparameters
 import ezrop
 import pprint
+import re
 
 
 outfunc = {
@@ -98,6 +99,7 @@ def action_build(codename, inparams):
 
 
 if len(sys.argv) == 1:
+	banner()
 	usage()
 	exit()
 
@@ -112,9 +114,6 @@ if action == "list":
 		action_list()
 
 elif action == "rop":
-	# figure out parameter
-	#if re.search("^[0-9a-f]+$", sys.argv[3]) != None:
-
 	ezrop.do_ropfind(sys.argv[2], sys.argv[3])
 
 elif action == "pattern":

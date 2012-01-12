@@ -61,7 +61,7 @@ class ElfObject:
 			self.elfwidth = 64
 
 		self.parse_header()
-		self.print_header()
+		#self.print_header()
 
 		sh_offset = self.header['shoff']
 		sh_length = self.header['shnum'] * self.header['shentsize']
