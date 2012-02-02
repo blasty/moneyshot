@@ -1,0 +1,3 @@
+[submodule "lib/libformatstr"]
+	path = lib/libformatstr
+	url = git://github.com/hellman/libformatstr.git
