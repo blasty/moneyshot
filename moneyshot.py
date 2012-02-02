@@ -8,7 +8,8 @@ import codeparameters
 import ezrop
 import pprint
 import re
-
+import socket
+import termios, tty, select, os
 
 outfunc = {
 	'c'       : outputter.c,
@@ -105,7 +106,7 @@ if len(sys.argv) == 1:
 
 action = sys.argv[1]
 
-codelibrary.load_codes("codes")
+codelibrary.load_codes(sys.path[0] + "/codes")
 
 if action == "list":
 	if len(sys.argv) == 3:
@@ -114,7 +115,10 @@ if action == "list":
 		action_list()
 
 elif action == "rop":
-	ezrop.do_ropfind(sys.argv[2], sys.argv[3])
+	if len(sys.argv) != 4:
+		print "usage: moneyshot rop <binary> <pattern/code>"
+	else:
+		ezrop.do_ropfind(sys.argv[2], sys.argv[3])
 
 elif action == "pattern":
 	if len(sys.argv) == 3:
@@ -137,6 +141,23 @@ elif action == "pattern":
 	else:
 		print "fail"
 
+elif action == "shell":
+	target = (sys.argv[2], int(sys.argv[3]))
+
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.connect(target)
+
+	old_settings = termios.tcgetattr(0)
+	try:
+		tty.setcbreak(0)
+		c = True
+		while c:
+			for i in select.select([0, s.fileno()], [], [], 0)[0]:
+				c = os.read(i, 1024)
+				if c: os.write(s.fileno() if i == 0 else 1, c)
+	except KeyboardInterrupt: pass
+	finally: termios.tcsetattr(0, termios.TCSADRAIN, old_settings)
+
 elif action == "format":
 	if len(sys.argv) < 3:
 		action_format("c")
@@ -144,4 +165,7 @@ elif action == "format":
 		action_format(sys.argv[2])
 
 elif action == "build":
-	action_build(sys.argv[2], sys.argv[2:])
+	if len(sys.argv) < 3:
+		action_list()
+	else:
+		action_build(sys.argv[2], sys.argv[2:])
