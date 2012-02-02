@@ -11,6 +11,8 @@ import re
 import socket
 import termios, tty, select, os
 
+from lib.libformatstr import FormatStr
+
 outfunc = {
 	'c'       : outputter.c,
 	'php'     : outputter.php,
@@ -113,6 +115,29 @@ if action == "list":
 		action_list(sys.argv[2])
 	else:
 		action_list()
+
+elif action == "fmt":
+	if len(sys.argv) < 3:
+		print "usage: moneyshot fmt <primitives>"
+
+	p = FormatStr()
+
+	param_pos = 0
+	already_written = 0
+
+	for param in  sys.argv[2:]:
+		if param[0:2] == "w:":
+			(addr,val) = param[2:].split("=")
+			p[ int(addr, 0) ] = int(val, 0);
+		elif param[0:2] == "p:":
+			param_pos = int(param[2:], 0)
+		elif param[0:2] == "n:":
+			already_written = int(param[2:], 0)
+		else:
+			print "UNKNOWN FMT specifier: '%s'" % (param)
+			exit()
+
+	sys.stdout.write( p.payload(param_pos, start_len=already_written) )
 
 elif action == "rop":
 	if len(sys.argv) != 4:
