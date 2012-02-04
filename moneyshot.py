@@ -19,7 +19,8 @@ outfunc = {
 	'perl'    : outputter.perl,
 	'hexdump' : outputter.hexdump,
 	'disas'   : outputter.disas,
-	'bash'    : outputter.bash
+	'bash'    : outputter.bash,
+	'raw'     : outputter.raw
 }
 
 def banner():
@@ -38,7 +39,9 @@ def usage():
 	print "    * list"
 	print "    * build"
 	print "    * pattern"
-	print "    * format\n"
+	print "    * format"
+	print "    * fmt"
+	print "    * rop\n"
 
 def warning(instr):
 	print "  " + colors.fg('red') + colors.bold() + "!!" + colors.end() + " " + instr
