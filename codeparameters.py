@@ -78,7 +78,7 @@ def output_u16be(val):
 	return "%02x%02x" % ((val >> 8) & 0xff, val & 0xff)
 
 def param_stdin(parameter):
-	print "%s  >> [%s (%s)]: %s" % (colors.bold(), parameter['name'], parameter['type'], colors.end()),
+	print >>sys.stderr, "%s  >> [%s (%s)]: %s" % (colors.bold(), parameter['name'], parameter['type'], colors.end()),
 	line = sys.stdin.readline()
 
 	return line.replace("\n", "")
@@ -102,9 +102,9 @@ def handle_parameters(shellcode, params):
 
 		shellcode["code"] = shellcode["code"].replace(param['placeholder'], output(param, params[ param['name'] ]))
 
-		print "  " + colors.bold() + colors.fg('green') + "++" + colors.end(),
-		print " parameter " + colors.bold() + param['name'] + colors.end(),
-		print " set to '" + colors.bold() + params [ param['name'] ] + colors.end() + "'"
+		print >>sys.stderr, "  " + colors.bold() + colors.fg('green') + "++" + colors.end(),
+		print >>sys.stderr, " parameter " + colors.bold() + param['name'] + colors.end(),
+		print >>sys.stderr, " set to '" + colors.bold() + params [ param['name'] ] + colors.end() + "'"
 
 	return shellcode
 	
