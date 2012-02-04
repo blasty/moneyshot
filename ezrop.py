@@ -105,6 +105,8 @@ def do_ropfind(file, match_string):
 		pattern = assemble_str(match_string, sixtyfour)
 
 
+	print "[!] pattern: '%s'" % pattern
+
 	for section_name in myelf.strtable:
 		if section_name == "":
 			continue
