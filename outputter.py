@@ -158,6 +158,12 @@ def perl(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 def php(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 	return perl(buf, array_name, row_width, fancy)
 
+def raw(buf, array_name = '', row_width = 16, fancy = False):
+	if fancy:
+		return hexdump(buf, array_name, row_width, fancy)
+	else:
+		return buf
+
 def hex_bin(str):
 	return str.decode('hex')
 
