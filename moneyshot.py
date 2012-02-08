@@ -210,3 +210,8 @@ elif action == "build":
 		print "usage: moneyshot build <shellcode_path> [params]"
 	else:
 		action_build(sys.argv[2], sys.argv[2:])
+
+else:
+	banner()
+	usage()
+	exit()
