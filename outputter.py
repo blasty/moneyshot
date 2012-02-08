@@ -35,11 +35,13 @@ def disas(buf, array_name = '', row_width = 16, fancy = False):
 
 def bash(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 	out = "$'"
+	badchars = [ 0x27, 0x5c ]
 	for c in buf:
-		if ord(c) >= 0x20 and ord(c) <= 0x7E:
+		o = ord(c)
+		if o >= 0x20 and o <= 0x7E and o not in badchars:
 			out += c
 		else:
-			out += "\\x%02x" % (ord(c))
+			out += "\\x%02x" % (o)
 
 	out += "'"
 	return out
