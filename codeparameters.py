@@ -9,7 +9,10 @@ def validate(param, value):
 	validators = {
 		'u8'	 : validate_u8,
 		'ip'     : validate_ip,
-		'u16be'  : validate_u16be,
+		'u16be'  : validate_u16,
+		'u32be'  : validate_u32,
+		'u16le'  : validate_u16,
+		'u32le'  : validate_u32,
 		'string' : validate_string
 	}
 
@@ -20,6 +23,9 @@ def output(param, value):
 		'u8'	 : output_u8,
 		'ip'     : output_ip,
 		'u16be'  : output_u16be,
+		'u32be'  : output_u32be,
+		'u16le'  : output_u16le,
+		'u32le'  : output_u32le,
 		'string' : output_string
 	}
 
@@ -31,6 +37,28 @@ def parse_num(val):
 		return int(val, 16)
 	else:
 		return int(val)
+
+## fixed width int validators
+def validate_u8(val):
+	val = parse_num(val)
+	if val >= 0 and val <= 0xff:
+		return True
+	else:
+		return False
+
+def validate_u16(val):
+	val = parse_num(val)
+	if val >= 0 and val <= 0xffff:
+		return True
+	else:
+		return False
+
+def validate_u32(val):
+	val = parse_num(val)
+	if val >= 0 and val <= 0xffffffff:
+		return True
+	else:
+		return False
 
 ## string
 def validate_string(val):
@@ -46,7 +74,7 @@ def validate_ip(val):
 	if re.match(pattern, val) is not None:
 		return True
 	else:
-		return False
+ 		return False
 
 def output_ip(instr):
 	(a,b,c,d) = instr.split(".")
@@ -54,28 +82,29 @@ def output_ip(instr):
 
 
 ## U8
-def validate_u8(val):
-	val = parse_num(val)
-	if val >= 0 and val <= 0xff:
-		return True
-	else:
-		return False
-
 def output_u8(val):
 	val = parse_num(val)
 	return "%02x" % (val)
 
 ## U16be
-def validate_u16be(val):
-	val = parse_num(val)
-	if val >= 0 and val <= 0xffff:
-		return True
-	else:
-		return False
-
 def output_u16be(val):
 	val = parse_num(val)
 	return "%02x%02x" % ((val >> 8) & 0xff, val & 0xff)
+
+## U32be
+def output_u32be(val):
+	val = parse_num(val)
+	return "%02x%02x%02x%02x" % ((val >> 24) & 0xff, (val >> 16) & 0xff, (val >> 8) & 0xff, val & 0xff)
+
+## U16le
+def output_u16le(val):
+	val = parse_num(val)
+	return "%02x%02x" % (val & 0xff, (val >> 8) & 0xff)
+
+## U32le
+def output_u32le(val):
+	val = parse_num(val)
+	return "%02x%02x%02x%02x" % (val & 0xff, (val >> 8) & 0xff, (val >> 16) & 0xff, (val >> 24) & 0xff)
 
 def param_stdin(parameter):
 	print >>sys.stderr, "%s  >> [%s (%s)]: %s" % (colors.bold(), parameter['name'], parameter['type'], colors.end()),
