@@ -167,7 +167,7 @@ elif action == "pattern":
 		else:
 			print pat.find(sys.argv[3], 0)
 	else:
-		print "fail"
+		print "usage: moneyshot pattern <length> [hexval]"
 
 elif action == "shell":
 	target = (sys.argv[2], int(sys.argv[3]))
