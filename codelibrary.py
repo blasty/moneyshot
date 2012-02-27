@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import colors
-import simplejson
+import json
 import fnmatch
 import os
 
@@ -24,6 +24,7 @@ def load_codes_dir(dirname, depth = 0):
 
 			if extension == ".json":
 				jstr = open(dirname + os.sep + entry).read()
+				shellcodes[basename] = json.loads(jstr)
 
 				try:
 					shellcodes[basename] = simplejson.loads(jstr)

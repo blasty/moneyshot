@@ -36,12 +36,12 @@ def usage():
 	print ""
 	print "  usage: moneyshot <action> [options]\n"
 	print "  actions:"
-	print "    * list"
-	print "    * build"
-	print "    * pattern"
-	print "    * format"
-	print "    * fmt"
-	print "    * rop\n"
+	print "    * list     - list shellcodes"
+	print "    * build    - build shellcodes"
+	print "    * pattern  - build patterns"
+	print "    * format   - format input"
+	print "    * fmt      - formatstring helper"
+	print "    * rop      - ROP helper\n"
 
 def warning(instr):
 	print "  " + colors.fg('red') + colors.bold() + "!!" + colors.end() + " " + instr
@@ -121,7 +121,11 @@ if action == "list":
 
 elif action == "fmt":
 	if len(sys.argv) < 3:
-		print "usage: moneyshot fmt <primitives>"
+		print "usage: moneyshot fmt <primitives>\n"
+		print "availables primitives:"
+		print "  * p:NNNN      - parameter position where user-controlled input starts"
+		print "  * n:NNNN      - specify bytes already written (defaults to 0)"
+		print "  * w:XXXX=YYYY - write value YYYY to address XXXX\n"
 
 	p = FormatStr()
 
@@ -163,13 +167,22 @@ elif action == "pattern":
 			str += chr((hexval >> 8) & 0xff)
 			str += chr((hexval >> 16) & 0xff)
 			str += chr((hexval >> 24) & 0xff)
-			print pat.find(str, 0)
+			res = pat.find(str, 0)
 		else:
-			print pat.find(sys.argv[3], 0)
+			res = pat.find(sys.argv[3], 0)
+
+		if res == -1:
+			print "Value not found in pattern"
+		else:
+			print res
 	else:
-		print "fail"
+		print "usage: moneyshot pattern <length> [hexval]"
 
 elif action == "shell":
+	if (len(sys.argv) != 4):
+		print "usage: moneyshot shell <host> <port>"
+		exit()	
+
 	target = (sys.argv[2], int(sys.argv[3]))
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -194,6 +207,11 @@ elif action == "format":
 
 elif action == "build":
 	if len(sys.argv) < 3:
-		action_list()
+		print "usage: moneyshot build <shellcode_path> [params]"
 	else:
 		action_build(sys.argv[2], sys.argv[2:])
+
+else:
+	banner()
+	usage()
+	exit()
