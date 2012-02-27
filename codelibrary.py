@@ -24,10 +24,9 @@ def load_codes_dir(dirname, depth = 0):
 
 			if extension == ".json":
 				jstr = open(dirname + os.sep + entry).read()
-				shellcodes[basename] = json.loads(jstr)
 
 				try:
-					shellcodes[basename] = simplejson.loads(jstr)
+					shellcodes[basename] = json.loads(jstr)
 
 					# fixup multiline kodez
 					shellcodes[basename]["code"] = ''.join(shellcodes[basename]["code"])
