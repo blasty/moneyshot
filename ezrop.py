@@ -90,6 +90,10 @@ def do_ropfind(file, match_string):
 
 	myelf = elf.fromfile(file)
 
+	if myelf.data[0:4] != "\x7F"+"ELF":
+		print "[!] '%s' is not a valid ELF file :(" % (file)
+		sys.exit(-1)
+
 	if myelf.elfwidth == 64:
 		print "[+] 64bit ELF"
 		sixtyfour = True

@@ -55,6 +55,9 @@ class ElfObject:
 	def __init__(self, elf_content):
 		self.data = elf_content
 
+		if self.data[0:4] != "\x7F"+"ELF":
+			return None
+
 		if ord(self.data[4]) == 1:
 			self.elfwidth = 32
 		else:
