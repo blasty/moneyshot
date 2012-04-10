@@ -3,6 +3,7 @@
 import re
 import sys
 import colors
+import binascii
 
 ## wrapper
 def validate(param, value):
@@ -16,7 +17,9 @@ def validate(param, value):
 		'string' : validate_string
 	}
 
-	return validators[ param['type'] ](value)
+	ptype = type_name(param['type'])
+
+	return validators[ ptype ](value)
 
 def output(param, value):
 	outfuncs = {
@@ -29,7 +32,20 @@ def output(param, value):
 		'string' : output_string
 	}
 
-	return outfuncs[ param['type'] ](value)
+	ptype  = type_name(param['type'])
+	pmod   = type_modifier(param['type'])
+
+	ret = outfuncs[ ptype ](value)
+
+	if pmod == "not":
+		newret = ''
+		b = binascii.unhexlify(ret)
+		for c in list(b):
+			newret += "%02x" % (ord(c) ^ 0xff)	
+	
+		ret = newret
+
+	return ret
 
 ## generic number parser
 def parse_num(val):
@@ -112,11 +128,24 @@ def param_stdin(parameter):
 
 	return line.replace("\n", "")
 
+def type_name(in_string):
+	return in_string.split("_")[0]	
+
+def type_modifier(in_string):
+	res = in_string.split("_")
+
+	if len(res) > 1:
+		return res[1]
+	else:
+		return False
+
 def handle_parameters(shellcode, params):
 	for param in shellcode["parameters"]:
 		ok = False
 
 		while ok == False:
+			print param
+
 			if param['name'] not in params:
 				params[ param['name'] ] = param_stdin(param)
 
@@ -124,7 +153,7 @@ def handle_parameters(shellcode, params):
 
 			if ok == False:
 				print "validation for parameter " + param['name'],
-				print " (of type " + param['type'] + ") ",
+				print " (of type " + type_name(param['type']) + ") ",
 				print "failed with input " +  params[ param['name'] ]
 
 				del params [ param['name'] ]
