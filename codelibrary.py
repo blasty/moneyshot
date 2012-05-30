@@ -24,10 +24,14 @@ def load_codes_dir(dirname, depth = 0):
 
 			if extension == ".json":
 				jstr = open(dirname + os.sep + entry).read()
-				shellcodes[basename] = json.loads(jstr)
 
-				# fixup multiline kodez
-				shellcodes[basename]["code"] = ''.join(shellcodes[basename]["code"])
+				try:
+					shellcodes[basename] = json.loads(jstr)
+
+					# fixup multiline kodez
+					shellcodes[basename]["code"] = ''.join(shellcodes[basename]["code"])
+				except:
+					print "Failed loading '%s/%s' :(" % (dirname, entry)
 	
 	return shellcodes
 

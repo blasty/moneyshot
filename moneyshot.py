@@ -147,10 +147,10 @@ elif action == "fmt":
 	sys.stdout.write( p.payload(param_pos, start_len=already_written) )
 
 elif action == "rop":
-	if len(sys.argv) != 4:
+	if len(sys.argv) < 4:
 		print "usage: moneyshot rop <binary> <pattern/code>"
 	else:
-		ezrop.do_ropfind(sys.argv[2], sys.argv[3])
+		ezrop.do_ropfind(sys.argv[2], " ".join(sys.argv[3:]))
 
 elif action == "pattern":
 	if len(sys.argv) == 3:
