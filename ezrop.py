@@ -27,7 +27,6 @@ def ok_disas(disas):
 
 	return True
 
-
 def findstr(section, matchstring):
 	ropmatches = []
 
@@ -35,7 +34,7 @@ def findstr(section, matchstring):
 
 	p = re.compile(matchstring)
 	for m in p.finditer(section.encode("hex")):
-		ropmatches.append([ m.start(), m.group() ])
+		ropmatches.append([ m.start() / 2, m.group() ])
 
 	return ropmatches
 
