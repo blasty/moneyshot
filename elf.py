@@ -8,6 +8,7 @@ elf_types = {
 	0: 'No file type',
 	1: 'Relocatable file',
 	2: 'Executable file',
+	3: 'LSB shared object',
 	4: 'Core file'
 } 
 
@@ -88,6 +89,8 @@ class ElfObject:
 
 			section_name = self.strdata[ section['name']:].split("\x00")[0]
 			self.strtable.append(section_name)
+
+		#self.print_section_headers()
 
 	def section(self, name):
 		for section in self.sections:
