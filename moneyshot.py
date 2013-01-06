@@ -37,11 +37,6 @@ def usage():
 def warning(instr):
 	print "  " + colors.fg('red') + colors.bold() + "!!" + colors.end() + " " + instr
 
-def action_list(path = ""):
-	codes = codelibrary.find_codes(path)
-	print ""
-	codelibrary.print_codes(codes)
-
 if len(sys.argv) == 1:
 	banner()
 	usage()
@@ -49,13 +44,8 @@ if len(sys.argv) == 1:
 
 action = sys.argv[1]
 
-codelibrary.load_codes(sys.path[0] + "/codes")
-
 if action == "list":
-	if len(sys.argv) == 3:
-		action_list(sys.argv[2])
-	else:
-		action_list()
+	codelibrary.main(sys.argv[2:])
 
 elif action == "fmt":
 	fmt.main(sys.argv[2:])

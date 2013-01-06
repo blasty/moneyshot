@@ -4,6 +4,7 @@ import colors
 import json
 import fnmatch
 import os
+import sys
 
 codes = { }
 
@@ -79,3 +80,15 @@ def print_codes(codes, depth = 0):
 		else:
 			print "  " * (depth+1) + colors.bold() + key + colors.end()
 			print_codes(codes[key], depth+1)
+
+def main(args):
+	load_codes(sys.path[0] + "/codes")
+
+	if len(args) == 0:
+		path = ""
+	else:
+		path = args[0]
+
+	codes = find_codes(path)
+	print ""
+	print_codes(codes)

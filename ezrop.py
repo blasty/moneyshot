@@ -4,11 +4,11 @@ import os
 import sys
 import elf
 import distorm3
-from distorm3 import Decode, Decode16Bits, Decode32Bits, Decode64Bits
 import optparse
 import colors
 import re
 import binascii
+from distorm3 import Decode, Decode16Bits, Decode32Bits, Decode64Bits
 
 def match_disas(disas, match):
 	for (offset, size, instruction, hexdump) in disas:
