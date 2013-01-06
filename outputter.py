@@ -169,3 +169,12 @@ def raw(buf, array_name = '', row_width = 16, fancy = False):
 def hex_bin(str):
 	return str.decode('hex')
 
+outfunc = {
+	'c'       : c,
+	'php'     : php,
+	'perl'    : perl,
+	'hexdump' : hexdump,
+	'disas'   : disas,
+	'bash'    : bash,
+	'raw'     : raw
+}

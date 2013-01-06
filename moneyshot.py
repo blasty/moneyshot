@@ -6,6 +6,7 @@ import outputter
 import codelibrary
 import codeparameters
 import lolsled
+import builder
 import ezrop
 import pprint
 import re
@@ -13,16 +14,6 @@ import socket
 import termios, tty, select, os
 
 from lib.libformatstr import FormatStr
-
-outfunc = {
-	'c'       : outputter.c,
-	'php'     : outputter.php,
-	'perl'    : outputter.perl,
-	'hexdump' : outputter.hexdump,
-	'disas'   : outputter.disas,
-	'bash'    : outputter.bash,
-	'raw'     : outputter.raw
-}
 
 def banner():
 	ms_fancy  = colors.bold() + colors.fg('yellow') + "$$$ " + colors.end()
@@ -57,7 +48,7 @@ def action_format(outformat):
 	data = sys.stdin.readlines()
 	data = ''.join(data)
 
-	print outfunc[ outformat ](data, fancy = False),
+	print outputter.outfunc[ outformat ](data, fancy = False),
 
 def gen_pattern(length):
 	n = 0
@@ -70,40 +61,6 @@ def gen_pattern(length):
 				n = n + 3
 				if n >= length:
 					return out[0:length]
-
-def action_build(codename, inparams):
-	params = { }
-
-	# parse user args
-	for keyval in inparams:
-		if len(keyval.split("=")) == 2:
-			(key, val) = keyval.split("=")
-			params[key] = val
-
-	if 'outformat' not in params:
-		params['outformat'] = "c"
-
-	codenames = codename.split(',')
-
-	bincode = ''
-
-	for curname in codenames:
-		shellcode = codelibrary.get_by_name(curname)
-
-		if "parameters" in shellcode:
-			shellcode = codeparameters.handle_parameters(shellcode, params)
-
-		bincode += outputter.hex_bin(shellcode['code'])
-
-
-	outformat = params['outformat']
-	print "\n\n" + outfunc[ outformat ](bincode, fancy = True)
-
-	if 'outfile' in params:
-		rawoutput = outfunc[ outformat](bincode, fancy = False)
-		f = open(params['outfile'], 'w')
-		f.write(rawoutput)
-		f.close()
 
 
 if len(sys.argv) == 1:
@@ -211,10 +168,7 @@ elif action == "format":
 		action_format(sys.argv[2])
 
 elif action == "build":
-	if len(sys.argv) < 3:
-		print "usage: moneyshot build <shellcode_path> [params]"
-	else:
-		action_build(sys.argv[2], sys.argv[2:])
+	builder.main(sys.argv[2:])
 
 else:
 	banner()
