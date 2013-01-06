@@ -10,11 +10,10 @@ import builder
 import pattern
 import ezrop
 import pprint
+import fmt
 import re
 import socket
 import termios, tty, select, os
-
-from lib.libformatstr import FormatStr
 
 def banner():
 	ms_fancy  = colors.bold() + colors.fg('yellow') + "$$$ " + colors.end()
@@ -67,31 +66,7 @@ if action == "list":
 		action_list()
 
 elif action == "fmt":
-	if len(sys.argv) < 3:
-		print "usage: moneyshot fmt <primitives>\n"
-		print "availables primitives:"
-		print "  * p:NNNN      - parameter position where user-controlled input starts"
-		print "  * n:NNNN      - specify bytes already written (defaults to 0)"
-		print "  * w:XXXX=YYYY - write value YYYY to address XXXX\n"
-
-	p = FormatStr()
-
-	param_pos = 0
-	already_written = 0
-
-	for param in  sys.argv[2:]:
-		if param[0:2] == "w:":
-			(addr,val) = param[2:].split("=")
-			p[ int(addr, 0) ] = int(val, 0);
-		elif param[0:2] == "p:":
-			param_pos = int(param[2:], 0)
-		elif param[0:2] == "n:":
-			already_written = int(param[2:], 0)
-		else:
-			print "UNKNOWN FMT specifier: '%s'" % (param)
-			exit()
-
-	sys.stdout.write( p.payload(param_pos, start_len=already_written) )
+	fmt.main(sys.argv[2:])
 
 elif action == "rop":
 	if len(sys.argv) < 4:
