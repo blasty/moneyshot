@@ -34,9 +34,6 @@ def usage():
 	print "    * fmt      - formatstring helper"
 	print "    * rop      - ROP helper\n"
 
-def warning(instr):
-	print "  " + colors.fg('red') + colors.bold() + "!!" + colors.end() + " " + instr
-
 if len(sys.argv) == 1:
 	banner()
 	usage()
