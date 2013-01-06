@@ -69,10 +69,7 @@ elif action == "fmt":
 	fmt.main(sys.argv[2:])
 
 elif action == "rop":
-	if len(sys.argv) < 4:
-		print "usage: moneyshot rop <binary> <pattern/code>"
-	else:
-		ezrop.do_ropfind(sys.argv[2], " ".join(sys.argv[3:]))
+	ezrop.main(sys.argv[2:])
 
 elif action == "lolsled":
 	lolsled.main(sys.argv[2:])

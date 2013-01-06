@@ -191,3 +191,9 @@ def do_ezrop(text):
 				block_len = block_len - 1
 
 		i = i + 1
+
+def main(args):
+	if len(args) < 2:
+		print "usage: moneyshot rop <binary> <pattern/code>"
+	else:
+		do_ropfind(args[0], " ".join(args[1:]))
