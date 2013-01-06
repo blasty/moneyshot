@@ -145,7 +145,7 @@ def do_ropfind(file, match_string):
 			disas = disas_str(section['addr'] + match[0], binascii.unhexlify(match[1]), sixtyfour)
 			fstr =  colors.fg('cyan') + " \_ " + colors.fg('green') + "%08x [" + colors.bold() + match[1] + colors.end()
 			fstr += colors.fg('green') + "] "+ colors.bold() + "-> " + colors.end()
-			fstr += colors.fg('red') + ' ; '.join(disas) + colors.end()
+			fstr += colors.fg('red') + ' ; '.join(disas).lower() + colors.end()
 			print fstr % (section['addr'] + match[0])
 
 			gadgets.append(match[1])
