@@ -44,12 +44,6 @@ def action_list(path = ""):
 	print ""
 	codelibrary.print_codes(codes)
 
-def action_format(outformat):
-	data = sys.stdin.readlines()
-	data = ''.join(data)
-
-	print outputter.outfunc[ outformat ](data, fancy = False),
-
 if len(sys.argv) == 1:
 	banner()
 	usage()
@@ -99,10 +93,7 @@ elif action == "shell":
 	finally: termios.tcsetattr(0, termios.TCSADRAIN, old_settings)
 
 elif action == "format":
-	if len(sys.argv) < 3:
-		action_format("c")
-	else:
-		action_format(sys.argv[2])
+	outputter.main(sys.argv[2:])
 
 elif action == "build":
 	builder.main(sys.argv[2:])

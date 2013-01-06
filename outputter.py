@@ -2,6 +2,7 @@
 
 import colors
 import distorm3
+import sys
 
 def disas(buf, array_name = '', row_width = 16, fancy = False):
 	disas = distorm3.Decode(0, buf)
@@ -178,3 +179,22 @@ outfunc = {
 	'bash'    : bash,
 	'raw'     : raw
 }
+
+def main(args):
+	if len(args) > 1:
+		print "usage: moneyshot format [outformat]"
+		return
+
+	if len(args) == 1:
+		lang = args[0]
+	else:
+		lang = "c"
+
+	if lang not in outfunc:
+		print "Invalid outformat given: '%s' :(" % (lang)
+		return False
+
+	data = sys.stdin.readlines()
+	data = ''.join(data)
+
+	print outfunc[ lang ](data, fancy = False),
