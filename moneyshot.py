@@ -7,6 +7,7 @@ import codelibrary
 import codeparameters
 import lolsled
 import builder
+import pattern
 import ezrop
 import pprint
 import re
@@ -49,19 +50,6 @@ def action_format(outformat):
 	data = ''.join(data)
 
 	print outputter.outfunc[ outformat ](data, fancy = False),
-
-def gen_pattern(length):
-	n = 0
-	out = ''
-
-	for x in range(0,26):
-		for y in range(0,26):
-			for z in range(0,10):
-				out += "%c%c%c" % (chr(0x41+x), chr(0x61+y), chr(0x30+z))
-				n = n + 3
-				if n >= length:
-					return out[0:length]
-
 
 if len(sys.argv) == 1:
 	banner()
@@ -115,30 +103,7 @@ elif action == "lolsled":
 	lolsled.main(sys.argv[2:])
 
 elif action == "pattern":
-	if len(sys.argv) == 3:
-		length = int(sys.argv[2])
-		pat = gen_pattern(length)
-		print pat
-	elif len(sys.argv) == 4:
-		length = int(sys.argv[2])
-		pat = gen_pattern(length)
-
-		if sys.argv[3][0:2] == "0x":
-			hexval = int(sys.argv[3], 16)
-			str  = chr(hexval & 0xff)
-			str += chr((hexval >> 8) & 0xff)
-			str += chr((hexval >> 16) & 0xff)
-			str += chr((hexval >> 24) & 0xff)
-			res = pat.find(str, 0)
-		else:
-			res = pat.find(sys.argv[3], 0)
-
-		if res == -1:
-			print "Value not found in pattern"
-		else:
-			print res
-	else:
-		print "usage: moneyshot pattern <length> [hexval]"
+	pattern.main(sys.argv[2:])
 
 elif action == "shell":
 	if (len(sys.argv) != 4):
