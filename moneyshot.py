@@ -11,9 +11,7 @@ import pattern
 import ezrop
 import pprint
 import fmt
-import re
-import socket
-import termios, tty, select, os
+import shell
 
 def banner():
 	ms_fancy  = colors.bold() + colors.fg('yellow') + "$$$ " + colors.end()
@@ -72,25 +70,7 @@ elif action == "pattern":
 	pattern.main(sys.argv[2:])
 
 elif action == "shell":
-	if (len(sys.argv) != 4):
-		print "usage: moneyshot shell <host> <port>"
-		exit()	
-
-	target = (sys.argv[2], int(sys.argv[3]))
-
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect(target)
-
-	old_settings = termios.tcgetattr(0)
-	try:
-		tty.setcbreak(0)
-		c = True
-		while c:
-			for i in select.select([0, s.fileno()], [], [], 0)[0]:
-				c = os.read(i, 1024)
-				if c: os.write(s.fileno() if i == 0 else 1, c)
-	except KeyboardInterrupt: pass
-	finally: termios.tcsetattr(0, termios.TCSADRAIN, old_settings)
+	shell.main(sys.argv[2:])
 
 elif action == "format":
 	outputter.main(sys.argv[2:])
