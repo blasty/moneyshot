@@ -34,6 +34,9 @@ def findstr(section, matchstring):
 
 	p = re.compile(matchstring)
 	for m in p.finditer(section.encode("hex")):
+		if (m.start() % 2) != 0:
+			continue
+
 		ropmatches.append([ m.start() / 2, m.group() ])
 
 	return ropmatches
