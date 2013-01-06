@@ -4,7 +4,7 @@ import os
 import sys
 import elf
 import distorm3
-#from distorm3 import Decode, Decode16Bits, Decode32Bits, Decode64Bits
+from distorm3 import Decode, Decode16Bits, Decode32Bits, Decode64Bits
 import optparse
 import colors
 import re

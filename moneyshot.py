@@ -39,6 +39,7 @@ def usage():
 	print "    * list     - list shellcodes"
 	print "    * build    - build shellcodes"
 	print "    * pattern  - build patterns"
+	print "    * lolsled  - build a lolsled"
 	print "    * format   - format input"
 	print "    * fmt      - formatstring helper"
 	print "    * rop      - ROP helper\n"
@@ -151,6 +152,42 @@ elif action == "rop":
 		print "usage: moneyshot rop <binary> <pattern/code>"
 	else:
 		ezrop.do_ropfind(sys.argv[2], " ".join(sys.argv[3:]))
+
+elif action == "lolsled":
+	if len(sys.argv) < 3:
+		print "usage:"
+		print "  moneyshot lolsled <length>"
+		print "  moneyshot lolsled <dictionary>"
+
+	# some 'harmless' x86 insns, just inc's and dec's
+	whitelist=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
+
+	# length?
+	if sys.argv[2].isdigit():
+		print "not implemented"
+	# assume dictfile (find mode)
+	else:
+		words = open(sys.argv[2]).readlines()
+		for word in words:
+			ok = True
+			word = word.strip().upper()
+
+			for c in word:
+				if c not in whitelist:
+					ok = False
+
+			if not ok:
+				continue
+
+			fstr = colors.fg('cyan')
+			fstr += ">> "
+			fstr += colors.fg('green')
+			fstr += "'%15s' %s--> " % (word, colors.fg('white')+colors.bold())
+			fstr += colors.end() + colors.fg('red')
+			r = ezrop.disas_str(0, word)
+			fstr += ' ; '.join(r).lower()
+
+			print fstr
 
 elif action == "pattern":
 	if len(sys.argv) == 3:
