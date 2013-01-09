@@ -3,6 +3,7 @@
 import codelibrary
 import codeparameters
 import outputter
+import sys
 
 def do_build(codename, inparams):
 	params = { }
@@ -22,7 +23,6 @@ def do_build(codename, inparams):
 
 	for curname in codenames:
 		shellcode = codelibrary.get_by_name(curname)
-
 		if "parameters" in shellcode:
 			shellcode = codeparameters.handle_parameters(shellcode, params)
 
@@ -43,4 +43,5 @@ def main(args):
 	if len(args) < 1:
 		print "usage: moneyshot build <shellcode_path> [params]"
 	else:
-		do_build(args[0], args[0:])
+		codelibrary.load_codes(sys.path[0] + "/codes")
+		do_build(args[0], args[1:])
