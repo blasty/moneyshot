@@ -14,13 +14,14 @@ import fmt
 import shell
 
 def banner():
-	ms_fancy  = colors.bold() + colors.fg('yellow') + "$$$ " + colors.end()
-	ms_fancy += colors.bold() + "moneyshot" + colors.end()
-	ms_fancy += " by "
-	ms_fancy += colors.bold() + "blasty"  + colors.end()
-	ms_fancy += colors.bold() + colors.fg('yellow') + " $$$" + colors.end()
+	asquee = """
+    __   __  ______.___   __  _____._  __._______._ __  ____._________
+   /  \ /  \/  __  |    \|  |/  ___| \/  /\  ___/  |  |/ __  \__   __/
+  /    '    \   /  |  |\    |   _|_\    /__\   \|     |   /  |  |  |
+ /___\  /    \_____|__|  \__|______||__||______/|__|__|\_____|  |__|
+      \/ _____\\   """
 
-	sys.stderr.write("\n " + ms_fancy + "\n\n")
+	sys.stderr.write(colors.bold() + colors.fg('cyan') + asquee + colors.end() + "\n\n")
 
 def usage():
 	print ""
