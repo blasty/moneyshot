@@ -3,7 +3,7 @@
 import re
 import sys
 import colors
-import binascii
+import struct
 
 ## wrapper
 def validate(param, value):
@@ -39,7 +39,7 @@ def output(param, value):
 
 	if pmod == "not":
 		newret = ''
-		b = binascii.unhexlify(ret)
+		b = ret.decode("hex")
 		for c in list(b):
 			newret += "%02x" % (ord(c) ^ 0xff)	
 	
@@ -100,27 +100,27 @@ def output_ip(instr):
 ## U8
 def output_u8(val):
 	val = parse_num(val)
-	return "%02x" % (val)
+	return struct.pack("B", val).encode("hex")
 
 ## U16be
 def output_u16be(val):
 	val = parse_num(val)
-	return "%02x%02x" % ((val >> 8) & 0xff, val & 0xff)
+	return struct.pack(">H", val).encode("hex")
 
 ## U32be
 def output_u32be(val):
 	val = parse_num(val)
-	return "%02x%02x%02x%02x" % ((val >> 24) & 0xff, (val >> 16) & 0xff, (val >> 8) & 0xff, val & 0xff)
+	return struct.pack(">L", val).encode("hex")
 
 ## U16le
 def output_u16le(val):
 	val = parse_num(val)
-	return "%02x%02x" % (val & 0xff, (val >> 8) & 0xff)
+	return struct.pack("<H", val).encode("hex")
 
 ## U32le
 def output_u32le(val):
 	val = parse_num(val)
-	return "%02x%02x%02x%02x" % (val & 0xff, (val >> 8) & 0xff, (val >> 16) & 0xff, (val >> 24) & 0xff)
+	return struct.pack("<L", val).encode("hex")
 
 def param_stdin(parameter):
 	print >>sys.stderr, "%s  >> [%s (%s)]: %s" % (colors.bold(), parameter['name'], parameter['type'], colors.end()),
@@ -144,8 +144,6 @@ def handle_parameters(shellcode, params):
 		ok = False
 
 		while ok == False:
-			print param
-
 			if param['name'] not in params:
 				params[ param['name'] ] = param_stdin(param)
 
