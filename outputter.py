@@ -2,10 +2,20 @@
 
 import colors
 import distorm3
+import optparse
 import sys
 
-def disas(buf, array_name = '', row_width = 16, fancy = False):
-	disas = distorm3.Decode(0, buf)
+def disas(buf, array_name = '', row_width = 16, fancy = False, sixtyfour = False):
+	parser = optparse.OptionParser()
+
+	if sixtyfour == True:
+		parser.set_defaults(dt=distorm3.Decode64Bits)
+	else:
+		parser.set_defaults(dt=distorm3.Decode32Bits)
+
+	options, args = parser.parse_args([])
+
+	disas = distorm3.Decode(0, buf, options.dt)
 	out = ''
 
 	for (offset, size, instruction, hexdump) in disas:
@@ -33,6 +43,9 @@ def disas(buf, array_name = '', row_width = 16, fancy = False):
 		out += "  " + tmp + "\n"
 
 	return out
+
+def disas64(buf, array_name = '', row_width = 16, fancy = False):
+	return disas(buf, array_name, row_width, fancy, True)
 
 def bash(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 	out = "$'"
@@ -176,6 +189,7 @@ outfunc = {
 	'perl'    : perl,
 	'hexdump' : hexdump,
 	'disas'   : disas,
+	'disas64' : disas64,
 	'bash'    : bash,
 	'raw'     : raw
 }
