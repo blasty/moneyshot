@@ -42,7 +42,7 @@ def disas(buf, array_name = '', row_width = 16, fancy = False, sixtyfour = False
 
 		out += "  " + tmp + "\n"
 
-	return out
+	return out.lower()
 
 def disas64(buf, array_name = '', row_width = 16, fancy = False):
 	return disas(buf, array_name, row_width, fancy, True)
@@ -195,11 +195,11 @@ outfunc = {
 }
 
 def main(args):
-	if len(args) > 1:
-		print "usage: moneyshot format [outformat]"
+	if len(args) > 2:
+		print "usage: moneyshot format [outformat] [fancy=0]"
 		return
 
-	if len(args) == 1:
+	if len(args) >= 1:
 		lang = args[0]
 	else:
 		lang = "c"
@@ -211,4 +211,9 @@ def main(args):
 	data = sys.stdin.readlines()
 	data = ''.join(data)
 
-	print outfunc[ lang ](data, fancy = False),
+	if len(args) == 2 and args[1] == "1":
+		do_fancy = True
+	else:
+		do_fancy = False
+
+	print outfunc[ lang ](data, fancy = do_fancy),
