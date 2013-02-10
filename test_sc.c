@@ -2,12 +2,13 @@
 #include <sys/mman.h>
 #include <string.h>
 #include <stdlib.h>
-#include "shellcode.h"
 
 int (*sc)();
 
 int main(int argc, char **argv) {
-    void *ptr = mmap(0, sizeof(shellcode),
+	FILE *f;
+
+    void *ptr = mmap(0, 8192,
             PROT_EXEC | PROT_WRITE | PROT_READ, MAP_ANON
             | MAP_PRIVATE, -1, 0);
  
@@ -15,8 +16,11 @@ int main(int argc, char **argv) {
         perror("mmap");
         exit(-1);
     }
- 
-    memcpy(ptr, shellcode, sizeof(shellcode));
+
+	f = fopen(argv[1], "rb");
+	fread(ptr, 8192, 1, f);
+	fclose(f);
+
     sc = ptr;
  
     sc();
