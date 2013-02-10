@@ -6,3 +6,5 @@ win32:
 linux:
 	gcc -m32 -o test_sc_lnx_x86 test_sc.c
 	gcc -m64 -o test_sc_lnx_x86_64 test_sc.c
+	gcc -m32 -o test_sc_net_lnx_x86 test_sc_net.c
+	gcc -m64 -o test_sc_net_lnx_x86_64 test_sc_net.c
