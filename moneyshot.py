@@ -12,6 +12,8 @@ import ezrop
 import pprint
 import fmt
 import shell
+import rep
+import dwords
 
 def banner():
 	asquee = """
@@ -33,7 +35,9 @@ def usage():
 	print "    * lolsled  - build a lolsled"
 	print "    * format   - format input"
 	print "    * fmt      - formatstring helper"
-	print "    * rop      - ROP helper\n"
+	print "    * rop      - ROP helper"
+	print "    * rep      - String repeater"
+	print "    * dwords   - binary format dwords"
 
 if len(sys.argv) == 1:
 	banner()
@@ -65,6 +69,12 @@ elif action == "format":
 
 elif action == "build":
 	builder.main(sys.argv[2:])
+
+elif action == "rep":
+	rep.main(sys.argv[2:])
+
+elif action == "dwords":
+	dwords.main(sys.argv[2:])
 
 else:
 	banner()
