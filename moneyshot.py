@@ -2,7 +2,7 @@
 
 import sys
 import colors, outputter, codelibrary, codeparameters
-import lolsled, builder, pattern, ezrop, ezrop_arm, fmt
+import lolsled, builder, pattern, rop, rop_arm, fmt
 import shell, rep, dwords, dumpsym, dumpelf
 
 def banner():
