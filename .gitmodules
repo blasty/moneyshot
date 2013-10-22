@@ -1,3 +1,6 @@
 [submodule "lib/libformatstr"]
 	path = lib/libformatstr
 	url = git://github.com/hellman/libformatstr.git
+[submodule "lib/darm"]
+	path = lib/darm
+	url = git://github.com/jbremer/darm.git
