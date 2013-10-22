@@ -26,7 +26,7 @@ def usage():
 	print "    * format   - format input"
 	print "    * fmt      - formatstring helper"
 	print "    * rop      - ROP helper"
-	print "    * rop_arm  - ARM ROP helper"
+	print "    * rop-arm  - ARM ROP helper"
 	print "    * rep      - String repeater"
 	print "    * dwords   - binary format dwords"
 	print "    * dumpsym  - dump symbols for given binary"
@@ -41,7 +41,7 @@ action = sys.argv[1]
 
 valid_actions = [
 	"list", "build", "pattern", "lolsled", "format", "fmt", 
-	"rop", "rop_arm", "rep", "dwords", "dumpsym", "dumpelf"
+	"rop", "rop-arm", "rep", "dwords", "dumpsym", "dumpelf"
 ]
 
 if action not in valid_actions:
