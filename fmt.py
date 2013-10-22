@@ -9,9 +9,14 @@ def main(args):
 		print "availables primitives:"
 		print "  * p:NNNN      - parameter position where user-controlled input starts"
 		print "  * n:NNNN      - specify bytes already written (defaults to 0)"
-		print "  * w:XXXX=YYYY - write value YYYY to address XXXX\n"
+		print "  * w:XXXX=YYYY - write value YYYY to address XXXX"
+		print "  * o:format    - specify output format (base64, b64cmd, raw)\n"
 
 		return
+
+	valid_outformat = [ "base64", "b64cmd", "raw" ]
+
+	out_format = "raw"
 
 	p = FormatStr()
 
@@ -26,8 +31,22 @@ def main(args):
 			param_pos = int(param[2:], 0)
 		elif param[0:2] == "n:":
 			already_written = int(param[2:], 0)
+		elif param[0:2] == "o:":
+			out_format = param[2:]
+
+			if out_format not in valid_outformat:
+				print "UNKNOWN FMT outformat: '%s'" % (out_format)
+				exit()
 		else:
 			print "UNKNOWN FMT specifier: '%s'" % (param)
 			exit()
 
-	sys.stdout.write( p.payload(param_pos, start_len=already_written) )
+	fmt_str = p.payload(param_pos, start_len=already_written)
+
+	if out_format == "raw":
+		sys.stdout.write(fmt_str)
+	elif out_format == "base64":
+		sys.stdout.write(fmt_str.encode("base64"))
+	elif out_format == "b64cmd":
+		sys.stdout.write("`echo "+fmt_str.encode("base64").strip()+"|base64 -d`")
+
