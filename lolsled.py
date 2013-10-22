@@ -71,15 +71,15 @@ def emu(input_code):
 
 		regs = func[c](regs)
 
-	print regs
+	#print regs
 
 	return regs
 
 
 def main(args):
-	if len(args) != 1:
+	if len(args) != 1 and len(args) != 2:
 		print "usage:"
-		print "  moneyshot lolsled <length>"
+		print "  moneyshot lolsled <length> <words>"
 		print "  moneyshot lolsled <dictionary>"
 
 		return 
@@ -89,7 +89,19 @@ def main(args):
 
 	# length?
 	if args[0].isdigit():
-		print "not implemented"
+		rs = emu(args[1])
+		fstr = " CLOBBER: "
+		cl = False
+		for reg in rs:
+			if rs[reg] != 0:
+				fstr += "%s=%08x " % (reg, rs[reg])
+				cl = True
+
+		if cl == False:
+			fstr += "No clobbering, yay!"
+
+		print fstr
+
 	# assume dictfile (find mode)
 	else:
 		words = open(args[0]).readlines()
@@ -111,6 +123,13 @@ def main(args):
 			fstr += colors.end() + colors.fg('red')
 			r = ezrop.disas_str(0, word)
 			fstr += ' ; '.join(r).lower()
+			rs = emu(word)
+			fstr += " CLOBBER: "
+			cl = False
+			for reg in rs:
+				if rs[reg] != 0:
+					fstr += "%s=%08x " % (reg, rs[reg])
+					cl = True
 
 			print fstr
 
