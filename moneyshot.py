@@ -49,7 +49,7 @@ if action not in valid_actions:
 	usage()
 	exit()
 
-action = action.replace("-", "-")
+action = action.replace("-", "_")
 
 if action == "list":
 	action = "codelibrary"
