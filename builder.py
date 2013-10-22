@@ -30,7 +30,7 @@ def do_build(codename, inparams):
 
 
 	outformat = params['outformat']
-	print "\n\n" + outputter.outfunc[ outformat ](bincode, fancy = True)
+	sys.stdout.write(outputter.outfunc[ outformat ](bincode, fancy = True))
 
 	if 'outfile' in params:
 		rawoutput = outputter.outfunc[ outformat](bincode, fancy = False)
