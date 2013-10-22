@@ -4,6 +4,7 @@ import colors
 import distorm3
 import optparse
 import sys
+import struct
 
 def disas(buf, array_name = '', row_width = 16, fancy = False, sixtyfour = False):
 	parser = optparse.OptionParser()
@@ -180,6 +181,21 @@ def raw(buf, array_name = '', row_width = 16, fancy = False):
 	else:
 		return buf
 
+def dwords(buf, array_name = '', row_width = 16, fancy = False):
+	i = 0
+
+	out = ""
+
+	if len(buf) % 4 != 0:
+		buf += "\x00" * (4 - (len(buf)%4))
+
+	while i < len(buf):
+		v = struct.unpack("<L", buf[i:i+4])
+		out += "%08x: 0x%08x\n" % (i, v[0])
+		i = i+4
+
+	return out
+
 def hex_bin(str):
 	return str.decode('hex')
 
@@ -191,7 +207,8 @@ outfunc = {
 	'disas'   : disas,
 	'disas64' : disas64,
 	'bash'    : bash,
-	'raw'     : raw
+	'raw'     : raw,
+	'dwords'  : dwords
 }
 
 def main(args):
