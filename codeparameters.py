@@ -14,7 +14,8 @@ def validate(param, value):
 		'u32be'  : validate_u32,
 		'u16le'  : validate_u16,
 		'u32le'  : validate_u32,
-		'string' : validate_string
+		'string' : validate_string,
+		'stringn' : validate_string
 	}
 
 	ptype = type_name(param['type'])
@@ -29,7 +30,8 @@ def output(param, value):
 		'u32be'  : output_u32be,
 		'u16le'  : output_u16le,
 		'u32le'  : output_u32le,
-		'string' : output_string
+		'string' : output_string,
+		'stringn' : output_stringn
 	}
 
 	ptype  = type_name(param['type'])
@@ -81,7 +83,12 @@ def validate_string(val):
 	return True
 
 def output_string(instr):
+	instr = instr.replace("\\n", "\n")
+
 	return instr.encode('hex')
+
+def output_stringn(instr):
+	return output_string(instr+"\n")
 
 ## IP
 def validate_ip(val):
