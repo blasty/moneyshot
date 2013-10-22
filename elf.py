@@ -98,7 +98,7 @@ class ElfObject:
 			if section_name == name:
 				return section
 
-		return ""
+		return False
 
 
 	def parse_header(self):
@@ -200,7 +200,7 @@ class ElfObject:
 			i = i + self.header['shentsize']
 
 
-	def print_section_headers(self):
+	def print_section_headers(self, section_filter = ""):
 		for section in self.sections:
 			if section['addr'] == 0:
 				continue
@@ -211,5 +211,8 @@ class ElfObject:
 				type_string = section_types[ section['type'] ]
 			else:
 				type_string = "UNKNOWN"
+
+			if section_filter != "" and section_name.find(section_filter) == -1:
+				continue
 
 			print "%20s @ 0x%08x [%6d bytes] ** %s" % (section_name, section['addr'], section['size'], type_string)
