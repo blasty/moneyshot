@@ -1,19 +1,9 @@
 #!/usr/bin/python
 
 import sys
-import colors
-import outputter
-import codelibrary
-import codeparameters
-import lolsled
-import builder
-import pattern
-import ezrop
-import pprint
-import fmt
-import shell
-import rep
-import dwords
+import colors, outputter, codelibrary, codeparameters
+import lolsled, builder, pattern, ezrop, ezrop_arm, fmt
+import shell, rep, dwords, dumpsym, dumpelf
 
 def banner():
 	asquee = """
@@ -36,8 +26,11 @@ def usage():
 	print "    * format   - format input"
 	print "    * fmt      - formatstring helper"
 	print "    * rop      - ROP helper"
+	print "    * rop_arm  - ARM ROP helper"
 	print "    * rep      - String repeater"
 	print "    * dwords   - binary format dwords"
+	print "    * dumpsym  - dump symbols for given binary"
+	print "    * dumpelf  - dump information for given binary"
 
 if len(sys.argv) == 1:
 	banner()
@@ -46,37 +39,27 @@ if len(sys.argv) == 1:
 
 action = sys.argv[1]
 
-if action == "list":
-	codelibrary.main(sys.argv[2:])
+valid_actions = [
+	"list", "build", "pattern", "lolsled", "format", "fmt", 
+	"rop", "rop_arm", "rep", "dwords", "dumpsym", "dumpelf"
+]
 
-elif action == "fmt":
-	fmt.main(sys.argv[2:])
-
-elif action == "rop":
-	ezrop.main(sys.argv[2:])
-
-elif action == "lolsled":
-	lolsled.main(sys.argv[2:])
-
-elif action == "pattern":
-	pattern.main(sys.argv[2:])
-
-elif action == "shell":
-	shell.main(sys.argv[2:])
-
-elif action == "format":
-	outputter.main(sys.argv[2:])
-
-elif action == "build":
-	builder.main(sys.argv[2:])
-
-elif action == "rep":
-	rep.main(sys.argv[2:])
-
-elif action == "dwords":
-	dwords.main(sys.argv[2:])
-
-else:
+if action not in valid_actions:
 	banner()
 	usage()
 	exit()
+
+action = action.replace("-", "-")
+
+if action == "list":
+	action = "codelibrary"
+
+if action == "format":
+	action = "outputter"
+
+if action == "build":
+	action = "builder"
+
+globals()[ action ].main(sys.argv[2:])
+
+exit()
