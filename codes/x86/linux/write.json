@@ -4,7 +4,7 @@
 	"parameters"  : [
 		{
 			"name"        : "outstr",
-			"type"        : "string",
+			"type"        : "stringn",
 			"placeholder" : "beef"
 		}
 	],
