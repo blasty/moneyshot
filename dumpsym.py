@@ -3,6 +3,7 @@
 import sys
 import elf
 import struct
+import colors
 
 def main(args):
 	if len(args) != 1 and len(args) != 2:
@@ -57,7 +58,10 @@ def main(args):
 		if sym_filter != "" and name.find(sym_filter) == -1:
 			continue
 
-		print "[%08x] '%s'" % (sym_entry[1], name)
+		fstr  = colors.fg("green") + "[" + colors.bold() + "%08x" + colors.end() + colors.fg("green") + "]" + colors.end() 
+		fstr += " '" + colors.fg("red") + colors.bold() + "%s" + colors.end() + "'" 
+
+		print fstr % (sym_entry[1], name)
 
 		#print "ST_NAME:%08x (%30s) ST_VALUE:%016x ST_SIZE:%016x ST_INFO:%02x ST_OTHER:%02x ST_SHNDX:%04x" % (sym_entry[0], name, sym_entry[1], sym_entry[2], sym_entry[3], sym_entry[4], sym_entry[5])
 
