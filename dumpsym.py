@@ -52,7 +52,7 @@ def main(args):
 						i = i+16
 
 		name_len = dynstr['data'][(sym_entry[0]+1):].find("\x00")
-		name = dynstr['data'][ (sym_entry[0]+1) : (sym_entry[0]+name_len+1) ]
+		name = dynstr['data'][ (sym_entry[0]) : (sym_entry[0]+name_len+1) ]
 
 		
 		if sym_filter != "" and name.find(sym_filter) == -1:
