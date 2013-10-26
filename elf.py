@@ -100,43 +100,32 @@ class ElfObject:
 
 		return False
 
-
 	def parse_header(self):
 		self.header['magic']   = struct.unpack("16c", self.data[0:16])
 
-
 		if self.elfwidth == 32:
-			self.header['type']    = struct.unpack("<H",   self.data[16:18])[0]
-			self.header['machine'] = struct.unpack("<H",   self.data[18:20])[0]
-
-			self.header['version'] = struct.unpack("<L",   self.data[20:24])[0]
-			self.header['entry']   = struct.unpack("<L",   self.data[24:28])[0]
-			self.header['phoff']   = struct.unpack("<L",   self.data[28:32])[0]
-			self.header['shoff']   = struct.unpack("<L",   self.data[32:36])[0]
-			self.header['flags']   = struct.unpack("<L",   self.data[36:40])[0]
-
-			self.header['ehsize']     = struct.unpack("<H", self.data[40:42])[0]
-			self.header['phentsize']  = struct.unpack("<H", self.data[42:44])[0]
-			self.header['phnum']      = struct.unpack("<H", self.data[44:46])[0]
-			self.header['shentsize']  = struct.unpack("<H", self.data[46:48])[0]
-			self.header['shnum']      = struct.unpack("<H", self.data[48:50])[0]
-			self.header['shstrnidx']  = struct.unpack("<H", self.data[50:52])[0]
+			ehdr_unpack = "<HHLLLLLHHHHHH"
+			ehdr_end = 52
 		else:
-			self.header['type']    = struct.unpack("<H",   self.data[16:18])[0]
-			self.header['machine'] = struct.unpack("<H",   self.data[18:20])[0]
+			ehdr_unpack = "<HHLQQQLHHHHHH"
+			ehdr_end = 64
 
-			self.header['version'] = struct.unpack("<L",   self.data[20:24])[0]
-			self.header['entry']   = struct.unpack("<Q",   self.data[24:32])[0]
-			self.header['phoff']   = struct.unpack("<Q",   self.data[32:40])[0]
-			self.header['shoff']   = struct.unpack("<Q",   self.data[40:48])[0]
-			self.header['flags']   = struct.unpack("<L",   self.data[48:52])[0]
+		(
+			self.header['type'],
+			self.header['machine'],
+			self.header['version'],
+			self.header['entry'],
+			self.header['phoff'],
+			self.header['shoff'],
+			self.header['flags'],
+			self.header['ehsize'],
+			self.header['phentsize'],
+			self.header['phnum'],
+			self.header['shentsize'],
+			self.header['shnum'],
+			self.header['shstrnidx']
+		) = struct.unpack(ehdr_unpack, self.data[16:ehdr_end])
 
-			self.header['ehsize']     = struct.unpack("<H", self.data[52:54])[0]
-			self.header['phentsize']  = struct.unpack("<H", self.data[54:56])[0]
-			self.header['phnum']      = struct.unpack("<H", self.data[56:58])[0]
-			self.header['shentsize']  = struct.unpack("<H", self.data[58:60])[0]
-			self.header['shnum']      = struct.unpack("<H", self.data[60:62])[0]
-			self.header['shstrnidx']  = struct.unpack("<H", self.data[62:64])[0]
 
 	def print_header(self):
 		print ""
@@ -169,27 +158,24 @@ class ElfObject:
 			section = { }
 
 			if self.elfwidth == 32:
-				section['name']   = struct.unpack("<L", sdata[0:4])[0]
-				section['type']   = struct.unpack("<L", sdata[4:8])[0]
-				section['flags']  = struct.unpack("<L", sdata[8:12])[0]
-				section['addr']   = struct.unpack("<L", sdata[12:16])[0]
-				section['offset'] = struct.unpack("<L", sdata[16:20])[0]
-				section['size']   = struct.unpack("<L", sdata[20:24])[0]
-				section['link']   = struct.unpack("<L", sdata[24:28])[0]
-				section['info']   = struct.unpack("<L", sdata[28:32])[0]
-				section['align']  = struct.unpack("<L", sdata[32:36])[0]
-				section['entsz']  = struct.unpack("<L", sdata[36:40])[0]
+				shdr_end = 40
+				shdr_unpack = "<LLLLLLLLLL"
 			else:
-				section['name']   = struct.unpack("<L", sdata[0:4])[0]
-				section['type']   = struct.unpack("<L", sdata[4:8])[0]
-				section['flags']  = struct.unpack("<Q", sdata[8:16])[0]
-				section['addr']   = struct.unpack("<Q", sdata[16:24])[0]
-				section['offset'] = struct.unpack("<Q", sdata[24:32])[0]
-				section['size']   = struct.unpack("<Q", sdata[32:40])[0]
-				section['link']   = struct.unpack("<L", sdata[40:44])[0]
-				section['info']   = struct.unpack("<L", sdata[44:48])[0]
-				section['align']  = struct.unpack("<Q", sdata[48:56])[0]
-				section['entsz']  = struct.unpack("<Q", sdata[56:64])[0]
+				shdr_end = 64
+				shdr_unpack = "<LLQQQQLLQQ"
+
+			(
+				section['name'],
+				section['type'],
+				section['flags'],
+				section['addr'],
+				section['offset'],
+				section['size'],
+				section['link'],
+				section['info'],
+				section['align'],
+				section['entsz']
+			) = struct.unpack(shdr_unpack, sdata[0:shdr_end])
 
 
 			start = section['offset']
