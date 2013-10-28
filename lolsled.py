@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-import ezrop
+import rop
 import colors
 
 # Yo DAWG, This is the most retarded
