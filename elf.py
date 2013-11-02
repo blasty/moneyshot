@@ -52,6 +52,8 @@ class ElfObject:
 	header = { }
 	section = { }
 	strtable = []
+	endianness = 0 # 1=le, 2=be
+	unp_char = "<"
 
 	def __init__(self, elf_content):
 		self.data = elf_content
@@ -63,6 +65,13 @@ class ElfObject:
 			self.elfwidth = 32
 		else:
 			self.elfwidth = 64
+
+		self.endianness = ord(self.data[5])
+
+		if self.endianness == 1:
+			self.unp_char = "<"
+		else:
+			self.unp_char = ">"
 
 		self.parse_header()
 		#self.print_header()
@@ -104,10 +113,10 @@ class ElfObject:
 		self.header['magic']   = struct.unpack("16c", self.data[0:16])
 
 		if self.elfwidth == 32:
-			ehdr_unpack = "<HHLLLLLHHHHHH"
+			ehdr_unpack = self.unp_char + "HHLLLLLHHHHHH"
 			ehdr_end = 52
 		else:
-			ehdr_unpack = "<HHLQQQLHHHHHH"
+			ehdr_unpack = self.unp_char + "HHLQQQLHHHHHH"
 			ehdr_end = 64
 
 		(
@@ -159,10 +168,10 @@ class ElfObject:
 
 			if self.elfwidth == 32:
 				shdr_end = 40
-				shdr_unpack = "<LLLLLLLLLL"
+				shdr_unpack = self.unp_char + "LLLLLLLLLL"
 			else:
 				shdr_end = 64
-				shdr_unpack = "<LLQQQQLLQQ"
+				shdr_unpack = self.unp_char + "LLQQQQLLQQ"
 
 			(
 				section['name'],
