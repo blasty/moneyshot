@@ -169,6 +169,45 @@ def c(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 
 	return code_array(buf, name, row_width, '', fancy);
 
+def python(buf, array_name = 'shellcode', row_width = 16, fancy = False):
+	lines = []
+	out = ""
+
+	for i in range(0, len(buf), row_width):
+		j = 0
+		linebuf = ''
+		while (j < row_width and (i+j) < len(buf)):
+			linebuf += "\\x%02x" % ( ord(buf[i+j]) )
+			j = j + 1
+
+		lines.append(linebuf);
+
+	for i in range(0, len(lines)-1):
+		if fancy:
+			if i == 0:
+				out += array_name + " =  " + colors.bold() + colors.fg('magenta') + "\""
+			else:
+				out += array_name + " += " + colors.bold() + colors.fg('magenta') + "\""
+
+			out += colors.fg("red") + lines[i]
+			out += colors.fg('magenta') + "\"\n" + colors.end()
+		else:
+			if i == 0:
+				out += array_name + "  = \"%s\"\n" % ( lines[i] )
+			else:
+				out += array_name + " += \"%s\"\n" % ( lines[i] )
+
+	if fancy:
+		out += array_name + " += " + colors.bold() + colors.fg('magenta') + "\""
+		out += colors.fg("red") + lines[len(lines)-1]
+		out += colors.fg('magenta') + "\"" + colors.end() + ";"
+		out += "\n\n"
+		# out += "\t\"%s\";\n\n" % ( lines[len(lines)-1] )
+	else:
+		out += array_name + " += \"%s\";\n\n" % ( lines[len(lines)-1] )
+
+	return out
+
 def perl(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 	return code_array(buf, '$' + array_name, row_width, ' . ', fancy)
 
@@ -206,6 +245,7 @@ outfunc = {
 	'hexdump' : hexdump,
 	'disas'   : disas,
 	'disas64' : disas64,
+	'python'  : python,
 	'bash'    : bash,
 	'raw'     : raw,
 	'dwords'  : dwords
