@@ -34,7 +34,7 @@ def findstr(section, matchstring):
 
 	p = re.compile(matchstring)
 	for m in p.finditer(section.encode("hex")):
-		if (m.start() % 2) != 0:
+		if (m.start() % 4) != 0:
 			continue
 
 		ropmatches.append([ m.start() / 2, m.group() ])
@@ -130,20 +130,20 @@ def do_ropfind(file, match_string):
 			disas = disas_str(section['addr'] + match[0], binascii.unhexlify(match[1]), True)
 			fstr =  colors.fg('cyan') + " \_ " + colors.fg('green') + "%08x [" + colors.bold() + match[1] + colors.end()
 			fstr += colors.fg('green') + "] "+ colors.bold() + "-> " + colors.end()
-			fstr += colors.fg('red') + "(THUMB) "  + ' ; '.join(disas).lower() + colors.end()
-			print fstr % (section['addr'] + match[0])
+			fstr += colors.fg('red') + "("+colors.bold()+"Thumb"+colors.end()+colors.fg('red')+") "  + ' ; '.join(disas).lower() + colors.end()
+			print fstr % (section['addr'] + match[0] + 1)
 
 			gadgets.append(match[1])
 			if (len(binascii.unhexlify(match[1])) % 4) == 0:
 				disas = disas_str(section['addr'] + match[0], binascii.unhexlify(match[1]), False)
 				fstr =  colors.fg('cyan') + " \_ " + colors.fg('green') + "%08x [" + colors.bold() + match[1] + colors.end()
 				fstr += colors.fg('green') + "] "+ colors.bold() + "-> " + colors.end()
-				fstr += colors.fg('red') + "(ARM  ) " + ' ; '.join(disas).lower() + colors.end()
+				fstr += colors.fg('red') + "("+colors.bold()+"ARM"+colors.end()+colors.fg('red')+"  ) " + ' ; '.join(disas).lower() + colors.end()
 
-				if not (len(disas) == 1 and disas[0] == ""):
+				if not (len(disas) == 1 and (disas[0] == "" or disas[0] == "None")):
 					print fstr % (section['addr'] + match[0])
 
-				gadgets.append(match[1])
+					gadgets.append(match[1])
 
 		if m == 1:
 			print ""
