@@ -62,13 +62,20 @@ def assemble_str(code):
 	return pattern
 	
 
-def disas_str(addr, data):
+def disas_str(addr, data, thumb_mode):
 	out_insn = []
 
-	insns = struct.unpack("I"*(len(data)/4), data)
 
-	for insn in insns:
-		out_insn.append(str(darm.disasm_armv7(insn)))
+	if thumb_mode == True:
+		insns = struct.unpack("H"*(len(data)/2), data)
+
+		for insn in insns:
+			out_insn.append(str(darm.disasm_thumb(insn)))
+	else:
+		insns = struct.unpack("I"*(len(data)/4), data)
+
+		for insn in insns:
+			out_insn.append(str(darm.disasm_armv7(insn)))
 
 	return out_insn
 
@@ -120,13 +127,23 @@ def do_ropfind(file, match_string):
 				print pstr
 				m = 1
 
-			disas = disas_str(section['addr'] + match[0], binascii.unhexlify(match[1]))
+			disas = disas_str(section['addr'] + match[0], binascii.unhexlify(match[1]), True)
 			fstr =  colors.fg('cyan') + " \_ " + colors.fg('green') + "%08x [" + colors.bold() + match[1] + colors.end()
 			fstr += colors.fg('green') + "] "+ colors.bold() + "-> " + colors.end()
-			fstr += colors.fg('red') + ' ; '.join(disas).lower() + colors.end()
+			fstr += colors.fg('red') + "(THUMB) "  + ' ; '.join(disas).lower() + colors.end()
 			print fstr % (section['addr'] + match[0])
 
 			gadgets.append(match[1])
+			if (len(binascii.unhexlify(match[1])) % 4) == 0:
+				disas = disas_str(section['addr'] + match[0], binascii.unhexlify(match[1]), False)
+				fstr =  colors.fg('cyan') + " \_ " + colors.fg('green') + "%08x [" + colors.bold() + match[1] + colors.end()
+				fstr += colors.fg('green') + "] "+ colors.bold() + "-> " + colors.end()
+				fstr += colors.fg('red') + "(ARM  ) " + ' ; '.join(disas).lower() + colors.end()
+
+				if not (len(disas) == 1 and disas[0] == ""):
+					print fstr % (section['addr'] + match[0])
+
+				gadgets.append(match[1])
 
 		if m == 1:
 			print ""
