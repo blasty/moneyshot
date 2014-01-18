@@ -220,6 +220,9 @@ def raw(buf, array_name = '', row_width = 16, fancy = False):
 	else:
 		return buf
 
+def hhex(buf, array_name = '', row_width = 16, fancy = False):
+	return buf.encode("hex")
+
 def dwords(buf, array_name = '', row_width = 16, fancy = False):
 	i = 0
 
@@ -243,6 +246,7 @@ outfunc = {
 	'php'     : php,
 	'perl'    : perl,
 	'hexdump' : hexdump,
+	'hex'     : hhex,
 	'disas'   : disas,
 	'disas64' : disas64,
 	'python'  : python,
