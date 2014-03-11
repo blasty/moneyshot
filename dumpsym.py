@@ -45,23 +45,29 @@ def main(args):
 
 	while i < len(dynsym['data']):
 		if sixtyfour == True:
-						sym_entry = struct.unpack("<LQQBBH", dynsym['data'][i:(i+24)])
-						i = i+24
+			# Elf64_Sym
+			(
+				st_name, st_info, st_other, st_shndx, st_value, st_size
+			) = struct.unpack("<LBBHQQ", dynsym['data'][i:(i+24)])
+
+			i = i+24
+
 		else:
-						sym_entry = struct.unpack("<LLLBBH", dynsym['data'][i:(i+16)])
-						i = i+16
+			# Elf32_Sym
+			(
+				st_name, st_value, st_size, st_info, st_other, st_shndx
+			) = struct.unpack("<LLLBBH", dynsym['data'][i:(i+16)])
 
-		name_len = dynstr['data'][(sym_entry[0]+1):].find("\x00")
-		name = dynstr['data'][ (sym_entry[0]) : (sym_entry[0]+name_len+1) ]
+			i = i+16
 
+		name_len = dynstr['data'][(st_name+1):].find("\x00")
+		name = dynstr['data'][ st_name : (st_name+name_len+1) ]
 		
 		if sym_filter != "" and name.find(sym_filter) == -1:
 			continue
 
-		fstr  = colors.fg("green") + "[" + colors.bold() + "%08x" + colors.end() + colors.fg("green") + "]" + colors.end() 
+		fstr  = colors.fg("green") + "[" + colors.bold() + "%08x" + colors.end()
+		fstr += colors.fg("green") + "]" + colors.end() 
 		fstr += " '" + colors.fg("red") + colors.bold() + "%s" + colors.end() + "'" 
 
-		print fstr % (sym_entry[1], name)
-
-		#print "ST_NAME:%08x (%30s) ST_VALUE:%016x ST_SIZE:%016x ST_INFO:%02x ST_OTHER:%02x ST_SHNDX:%04x" % (sym_entry[0], name, sym_entry[1], sym_entry[2], sym_entry[3], sym_entry[4], sym_entry[5])
-
+		print fstr % (st_value, name)
