@@ -169,6 +169,26 @@ def c(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 
 	return code_array(buf, name, row_width, '', fancy);
 
+def carray(buf, array_name = 'shellcode', row_width = 16, fancy = False):
+	out = "unsigned char %s[%d]={\n" % (array_name, len(buf))
+
+	n = 0
+
+	for c in buf:
+		if n == len(buf)-1:
+			out += "0x%02x " % (ord(c))
+		else:
+			out += "0x%02x, " % (ord(c))
+
+		n=n+1
+
+		if (n % row_width) == 0:
+			out += "\n"
+
+	out += "};\n"
+
+	return out
+
 def python(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 	lines = []
 	out = ""
@@ -243,6 +263,7 @@ def hex_bin(str):
 
 outfunc = {
 	'c'       : c,
+	'carray'  : carray,
 	'php'     : php,
 	'perl'    : perl,
 	'hexdump' : hexdump,
