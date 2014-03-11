@@ -85,7 +85,9 @@ def main(args):
 		return 
 
 	# some 'harmless' x86 insns, just inc's and dec's
-	whitelist=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
+	whitelist=[
+		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"
+	]
 
 	# length?
 	if args[0].isdigit():
@@ -121,7 +123,7 @@ def main(args):
 			fstr += colors.fg('green')
 			fstr += "'%15s' %s--> " % (word, colors.fg('white')+colors.bold())
 			fstr += colors.end() + colors.fg('red')
-			r = ezrop.disas_str(0, word)
+			r = rop.disas_str(0, word)
 			fstr += ' ; '.join(r).lower()
 			rs = emu(word)
 			fstr += " CLOBBER: "
