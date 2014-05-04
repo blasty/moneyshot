@@ -6,6 +6,8 @@ import optparse
 import sys
 import struct
 
+from lib.darm import darm
+
 def disas(buf, array_name = '', row_width = 16, fancy = False, sixtyfour = False):
 	parser = optparse.OptionParser()
 
@@ -47,6 +49,68 @@ def disas(buf, array_name = '', row_width = 16, fancy = False, sixtyfour = False
 
 def disas64(buf, array_name = '', row_width = 16, fancy = False):
 	return disas(buf, array_name, row_width, fancy, True)
+
+def disas_arm(buf, array_name = '', row_width = 16, fancy = False):
+	insns = struct.unpack("I"*(len(buf)/4), buf)
+	out = ""
+	pos = 0
+	for insn in insns:
+		tmp = ""
+
+		if fancy:
+			tmp += colors.fg('cyan')
+
+		tmp += "%.8x: " % (pos)
+
+		if fancy:
+			tmp += colors.fg('red') + colors.bold()
+
+		tmp += "%08x " % (insn)
+
+		if fancy:
+			tmp += colors.end() + colors.fg('green')
+
+		tmp += str(darm.disasm_armv7(insn))
+
+		if fancy:
+			tmp += colors.end()
+
+		out += "  " + tmp + "\n"
+
+		pos = pos+4
+
+	return out
+
+def disas_thumb(buf, array_name = '', row_width = 16, fancy = False):
+	insns = struct.unpack("H"*(len(buf)/2), buf)
+	out = ""
+	pos = 0
+	for insn in insns:
+		tmp = ""
+
+		if fancy:
+			tmp += colors.fg('cyan')
+
+		tmp += "%.8x: " % (pos)
+
+		if fancy:
+			tmp += colors.fg('red') + colors.bold()
+
+		tmp += "%08x " % (insn)
+
+		if fancy:
+			tmp += colors.end() + colors.fg('green')
+
+		tmp += str(darm.disasm_thumb(insn))
+
+		if fancy:
+			tmp += colors.end()
+
+		out += "  " + tmp + "\n"
+
+		pos = pos+2
+
+	return out
 
 def bash(buf, array_name = 'shellcode', row_width = 16, fancy = False):
 	out = "$'"
@@ -270,6 +334,8 @@ outfunc = {
 	'hex'     : hhex,
 	'disas'   : disas,
 	'disas64' : disas64,
+	'disas-arm' : disas_arm,
+	'disas-thumb' : disas_thumb,
 	'python'  : python,
 	'bash'    : bash,
 	'raw'     : raw,
