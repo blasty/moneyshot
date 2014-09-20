@@ -25,8 +25,12 @@ def main(args):
 
 	for param in args:
 		if param[0:2] == "w:":
-			(addr,val) = param[2:].split("=")
-			p[ int(addr, 0) ] = int(val, 0);
+			(addr,vals) = param[2:].split("=")
+			n=0
+			for val in vals.split(","):
+				p[ int(addr, 0)+(n*4) ] = int(val, 0)
+				n = n+1
+
 		elif param[0:2] == "p:":
 			param_pos = int(param[2:], 0)
 		elif param[0:2] == "n:":
