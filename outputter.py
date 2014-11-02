@@ -307,6 +307,21 @@ def raw(buf, array_name = '', row_width = 16, fancy = False):
 def hhex(buf, array_name = '', row_width = 16, fancy = False):
 	return buf.encode("hex")
 
+def hwords(buf, array_name = '', row_width = 16, fancy = False):
+	i = 0
+
+	out = ""
+
+	if len(buf) % 2 != 0:
+		buf += "\x00" * (2 - (len(buf)%2))
+
+	while i < len(buf):
+		v = struct.unpack("<H", buf[i:i+2])
+		out += "%08x: 0x%04x\n" % (i, v[0])
+		i = i+2
+
+	return out
+
 def dwords(buf, array_name = '', row_width = 16, fancy = False):
 	i = 0
 
@@ -319,6 +334,21 @@ def dwords(buf, array_name = '', row_width = 16, fancy = False):
 		v = struct.unpack("<L", buf[i:i+4])
 		out += "%08x: 0x%08x\n" % (i, v[0])
 		i = i+4
+
+	return out
+
+def qwords(buf, array_name = '', row_width = 16, fancy = False):
+	i = 0
+
+	out = ""
+
+	if len(buf) % 8 != 0:
+		buf += "\x00" * (8 - (len(buf)%8))
+
+	while i < len(buf):
+		v = struct.unpack("<Q", buf[i:i+8])
+		out += "%08x: 0x%016x\n" % (i, v[0])
+		i = i+8
 
 	return out
 
@@ -339,7 +369,9 @@ outfunc = {
 	'python'  : python,
 	'bash'    : bash,
 	'raw'     : raw,
-	'dwords'  : dwords
+	'dwords'  : dwords,
+	'qwords'  : qwords,
+	'hwords'  : hwords
 }
 
 def main(args):
