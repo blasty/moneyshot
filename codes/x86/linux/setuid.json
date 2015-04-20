@@ -1,0 +1,14 @@
+{
+	"description" : "nonforking connectback, host/port can be specified",
+	"author"      : "eSDee <esdee@netric.org>",
+	"parameters"  : [
+		{
+			"name"        : "uid",
+			"type"        : "u32le_not",
+			"placeholder" : "c0debabe"
+		}
+	],
+	"code" : [
+		"31c031dbb017bbc0debabe83f3ffcd80"
+	]
+}
