@@ -1,5 +1,5 @@
 {
-	"description" : "reads filename from stdin and dumps 127bytes to stdout",
+	"description" : "reads filename from stdin and dumps file to stdout",
 	"author"      : "blasty",
-	"code"        : "31c031db31c931d2b003b30189e1b28029d1b27fcd8089cb418a0134103c1a75f731c08801b00531c9cd8089d989c331d2b27fb003cd8031dbb004cd80"
+	"code"        : "31c031db31c931d2b00389e1b28029d1b27fcd8089cb418a0134103c1a75f731c08801b00531c9cd8083f8ff742089df89c689f989f331d231c0b280b003cd803c00740a31db31c0b004cd80ebe490"
 }
