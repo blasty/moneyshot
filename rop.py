@@ -87,7 +87,55 @@ def disas_str(addr, data, sixtyfour = False):
 	return out_insn
 		
 
-def do_ropfind(file, match_string):
+def do_ropfind_raw(file, match_string):
+	gadgets = []
+
+	sixtyfour = True
+
+	data = open(file).read()
+
+	# figure out parameter
+	if re.search("^[0-9a-f\?]+$", match_string) != None:
+		pattern = match_string
+	else:
+		pattern = assemble_str(match_string, sixtyfour)
+
+
+	print "[!] pattern: '%s'" % pattern
+
+	matches = findstr(data, pattern)
+
+	if len(matches) == 0:
+		return
+
+	pstr  = colors.fg('cyan') + ">> section '" + colors.bold() + "RAW" + colors.end()
+	pstr += colors.fg('cyan') + "' [" + colors.bold() + str(len(matches)) + colors.end()
+	pstr += colors.fg('cyan') + " hits]"
+
+	m = 0
+
+	for match in matches:
+		if match[1] in gadgets:
+			continue
+
+		if m == 0:
+			print pstr
+			m = 1
+
+		disas = disas_str(match[0], binascii.unhexlify(match[1]), sixtyfour)
+		fstr =  colors.fg('cyan') + " \_ " + colors.fg('green') + "%08x [" + colors.bold() + match[1] + colors.end()
+		fstr += colors.fg('green') + "] "+ colors.bold() + "-> " + colors.end()
+		fstr += colors.fg('red') + ' ; '.join(disas).lower() + colors.end()
+		print fstr % (match[0])
+
+		gadgets.append(match[1])
+
+
+	if m == 1:
+		print ""
+
+
+def do_ropfind_elf(file, match_string):
 	gadgets = []
 
 	myelf = elf.fromfile(file)
@@ -196,4 +244,8 @@ def main(args):
 	if len(args) < 2:
 		print "usage: moneyshot rop <binary> <pattern/code>"
 	else:
-		do_ropfind(args[0], " ".join(args[1:]))
+		head = open(args[0]).read(4)
+		if head == "\x7F"+"ELF":
+			do_ropfind_elf(args[0], " ".join(args[1:]))
+		else:
+			do_ropfind_raw(args[0], " ".join(args[1:]))
