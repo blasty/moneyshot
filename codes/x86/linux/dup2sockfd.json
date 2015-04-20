@@ -1,0 +1,5 @@
+{
+	"description" : "find socketfd and dup2 stdin/stdout/stderr",
+	"author"      : "blasty",
+	"code"        : "54596a7f54516a7f54596a075bff096a6658cd8085c075f55b6a02596a3f58cd804979f8"
+}
