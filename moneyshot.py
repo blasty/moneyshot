@@ -3,7 +3,7 @@
 import sys
 import colors, outputter, codelibrary, codeparameters
 import lolsled, builder, pattern, rop, rop_arm, fmt
-import shell, rep, dwords, dumpsym, dumpelf
+import shell, rep, dwords, dumpsym, dumpelf, elfwrap
 
 def banner():
 	asquee = """
@@ -41,7 +41,8 @@ action = sys.argv[1]
 
 valid_actions = [
 	"list", "build", "pattern", "lolsled", "format", "fmt", 
-	"rop", "rop-arm", "rep", "dwords", "dumpsym", "dumpelf"
+	"rop", "rop-arm", "rep", "dwords", "dumpsym", "dumpelf",
+	"elfwrap"
 ]
 
 if action not in valid_actions:

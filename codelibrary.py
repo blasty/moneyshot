@@ -89,6 +89,15 @@ def main(args):
 	else:
 		path = args[0]
 
+	if path.endswith("/"):
+		path = path[:-1]
+
 	codes = find_codes(path)
+
+	if codes == False:
+		sys.stderr.write("error: invalid path given ('%s')\n" % path)
+		exit(-1)
+
 	print ""
 	print_codes(codes)
+	print ""

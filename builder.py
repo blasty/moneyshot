@@ -23,6 +23,11 @@ def do_build(codename, inparams):
 
 	for curname in codenames:
 		shellcode = codelibrary.get_by_name(curname)
+
+		if shellcode == False:
+			sys.stderr.write("error: shellcode '%s' not found.\n" % curname)
+			exit(-1)
+
 		if "parameters" in shellcode:
 			shellcode = codeparameters.handle_parameters(shellcode, params)
 
@@ -30,7 +35,13 @@ def do_build(codename, inparams):
 
 
 	outformat = params['outformat']
-	sys.stdout.write(outputter.outfunc[ outformat ](bincode, fancy = True))
+
+	if sys.stdout.isatty():
+		do_fancy = True
+	else:
+		do_fancy = False
+
+	sys.stdout.write(outputter.outfunc[ outformat ](bincode, fancy = do_fancy))
 
 	if 'outfile' in params:
 		rawoutput = outputter.outfunc[ outformat](bincode, fancy = False)
