@@ -183,8 +183,6 @@ def do_ropfind_elf(file, match_string):
 		m = 0
 
 		for match in matches:
-			if match[1] in gadgets:
-				continue
 
 			if m == 0:
 				print pstr
