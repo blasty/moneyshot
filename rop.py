@@ -8,6 +8,7 @@ import optparse
 import colors
 import re
 import binascii
+import argparse
 from distorm3 import Decode, Decode16Bits, Decode32Bits, Decode64Bits
 
 def match_disas(disas, match):
@@ -75,6 +76,9 @@ def disas_str(addr, data, sixtyfour = False):
 	else:
 		parser.set_defaults(dt=distorm3.Decode32Bits)
 
+	# this duplication is dirty, should be fixed
+	parser.add_option("--section")
+	parser.add_option("--single", action="store_true")
 	options, args = parser.parse_args(sys.argv)
 
 	out_insn = []
@@ -87,7 +91,7 @@ def disas_str(addr, data, sixtyfour = False):
 	return out_insn
 		
 
-def do_ropfind_raw(file, match_string):
+def do_ropfind_raw(file, match_string, single):
 	gadgets = []
 
 	sixtyfour = True
@@ -115,7 +119,7 @@ def do_ropfind_raw(file, match_string):
 	m = 0
 
 	for match in matches:
-		if match[1] in gadgets:
+		if single and match[1] in gadgets:
 			continue
 
 		if m == 0:
@@ -135,7 +139,7 @@ def do_ropfind_raw(file, match_string):
 		print ""
 
 
-def do_ropfind_elf(file, match_string):
+def do_ropfind_elf(file, match_string, do_section="", single=False):
 	gadgets = []
 
 	myelf = elf.fromfile(file)
@@ -165,6 +169,9 @@ def do_ropfind_elf(file, match_string):
 		if section_name == "":
 			continue
 
+		if do_section != None and section_name != do_section:
+			continue
+
 		section = myelf.section(section_name)
 
 		# check for PROGBITS type
@@ -183,7 +190,8 @@ def do_ropfind_elf(file, match_string):
 		m = 0
 
 		for match in matches:
-			if match[1] in gadgets:
+
+			if single and match[1] in gadgets:
 				continue
 
 			if m == 0:
@@ -241,11 +249,16 @@ def do_ezrop(text):
 		i = i + 1
 
 def main(args):
-	if len(args) < 2:
-		print "usage: moneyshot rop <binary> <pattern/code>"
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument("binary")
+	parser.add_argument("--section", metavar="name")
+	parser.add_argument("--single", action="store_true")
+	parser.add_argument("pattern", nargs="+")
+	argsp = parser.parse_args(args)
+
+	head = open(argsp.binary).read(4)
+	if head == "\x7F"+"ELF":
+		do_ropfind_elf(argsp.binary, " ".join(argsp.pattern),do_section=argsp.section,single=argsp.single)
 	else:
-		head = open(args[0]).read(4)
-		if head == "\x7F"+"ELF":
-			do_ropfind_elf(args[0], " ".join(args[1:]))
-		else:
-			do_ropfind_raw(args[0], " ".join(args[1:]))
+		do_ropfind_raw(argsp.binary, " ".join(argsp.pattern),single=argsp.single)
