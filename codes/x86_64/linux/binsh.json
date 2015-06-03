@@ -1,0 +1,5 @@
+{
+	"description" : "execve(/bin/sh,[/bin/sh,null,null],null)",
+	"author"      : "Dad`",
+	"code"        : "31c048bbd19d9691d08c97ff48f7db53545f995257545eb03b0f05"
+}

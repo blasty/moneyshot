@@ -1,0 +1,12 @@
+{
+	"description" : "dup2() stdin/stdout/stderr",
+	"author"      : "blasty",
+	"parameters"  : [
+		{
+			"name"        : "fd number",
+			"type"        : "u8",
+			"placeholder" : "99"
+		}
+	],
+	"code" : "6a995f6a025e4831c0b0210f0548ffce79f4"
+}
